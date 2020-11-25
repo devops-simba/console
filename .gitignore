@@ -3,6 +3,7 @@
 .vscode
 .protractor-fail-fast
 .DS_Store
+/go.sum
 /bin
 /gopath
 /Godeps/_workspace/src/github.com/openshift/console
