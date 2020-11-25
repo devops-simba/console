@@ -1,4 +1,4 @@
-thub.com/devops-simba/console
+module github.com/devops-simba/console
 
 go 1.13
 
