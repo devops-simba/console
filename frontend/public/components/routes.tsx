@@ -43,6 +43,10 @@ export type IngressStatusProps = {
 };
 
 const getRouteHost = (route: RouteKind, onlyAdmitted: boolean): string => {
+  if (route.spec.host) {
+    return route.spec.host;
+  }
+
   let oldestAdmittedIngress: RouteIngress;
   let oldestTransitionTime: string;
   _.each(route.status.ingress, (ingress) => {
