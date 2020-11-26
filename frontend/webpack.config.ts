@@ -203,6 +203,7 @@ const config: Configuration = {
   stats: 'minimal',
 };
 
+console.error('output path: ' + config.output.path)
 if (CHECK_CYCLES === 'true') {
   new CircularDependencyPreset({
     exclude: /node_modules|public\/dist/,
