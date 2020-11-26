@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	plog = capnslog.NewPackageLogger("github.com/openshift/console", "serverutils")
+	plog = capnslog.NewPackageLogger("github.com/devops-simba/console", "serverutils")
 )
 
 // Copied from Server package to maintain error response consistency

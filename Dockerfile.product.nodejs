@@ -1,7 +1,7 @@
 FROM openshift/origin-release:nodejs8
 
-COPY . /go/src/github.com/openshift/console/
-WORKDIR /go/src/github.com/openshift/console/
+COPY . /go/src/github.com/devops-simba/console/
+WORKDIR /go/src/github.com/devops-simba/console/
 
 RUN ./build-frontend.sh \
 &&  rm -rf /tmp/*

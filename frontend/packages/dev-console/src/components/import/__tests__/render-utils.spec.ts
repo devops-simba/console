@@ -25,7 +25,7 @@ describe('Ensure render utils works', () => {
     });
 
     it('expect github icon', () => {
-      expect(routeDecoratorIcon('https://github.com/openshift/console.git', 10).type).toEqual(
+      expect(routeDecoratorIcon('https://github.com/devops-simba/console.git', 10).type).toEqual(
         GithubIcon,
       );
     });

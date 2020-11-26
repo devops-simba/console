@@ -17,18 +17,18 @@ import (
 	"github.com/coreos/pkg/capnslog"
 	"github.com/coreos/pkg/flagutil"
 
-	"github.com/openshift/console/pkg/auth"
-	"github.com/openshift/console/pkg/bridge"
-	"github.com/openshift/console/pkg/crypto"
-	"github.com/openshift/console/pkg/helm/chartproxy"
-	"github.com/openshift/console/pkg/knative"
-	"github.com/openshift/console/pkg/proxy"
-	"github.com/openshift/console/pkg/server"
-	"github.com/openshift/console/pkg/serverconfig"
+	"github.com/devops-simba/console/pkg/auth"
+	"github.com/devops-simba/console/pkg/bridge"
+	"github.com/devops-simba/console/pkg/crypto"
+	"github.com/devops-simba/console/pkg/helm/chartproxy"
+	"github.com/devops-simba/console/pkg/knative"
+	"github.com/devops-simba/console/pkg/proxy"
+	"github.com/devops-simba/console/pkg/server"
+	"github.com/devops-simba/console/pkg/serverconfig"
 )
 
 var (
-	log = capnslog.NewPackageLogger("github.com/openshift/console", "cmd/main")
+	log = capnslog.NewPackageLogger("github.com/devops-simba/console", "cmd/main")
 )
 
 const (
@@ -59,7 +59,7 @@ const (
 )
 
 func main() {
-	rl := capnslog.MustRepoLogger("github.com/openshift/console")
+	rl := capnslog.MustRepoLogger("github.com/devops-simba/console")
 	capnslog.SetFormatter(capnslog.NewStringFormatter(os.Stderr))
 
 	fs := flag.NewFlagSet("bridge", flag.ExitOnError)

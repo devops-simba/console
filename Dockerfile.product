@@ -2,9 +2,9 @@
 #
 # go backend build
 FROM openshift/origin-release:golang AS gobuilder
-RUN mkdir -p /go/src/github.com/openshift/console/
-ADD . /go/src/github.com/openshift/console/
-WORKDIR /go/src/github.com/openshift/console/
+RUN mkdir -p /go/src/github.com/devops-simba/console/
+ADD . /go/src/github.com/devops-simba/console/
+WORKDIR /go/src/github.com/devops-simba/console/
 RUN ./build-backend.sh
 
 
@@ -40,9 +40,9 @@ RUN container-entrypoint ./build-frontend.sh
 # actual base image for final product
 FROM openshift3/origin-base
 RUN mkdir -p /opt/bridge/bin
-COPY --from=gobuilder /go/src/github.com/openshift/console/bin/bridge /opt/bridge/bin
+COPY --from=gobuilder /go/src/github.com/devops-simba/console/bin/bridge /opt/bridge/bin
 COPY --from=nodebuilder /opt/app-root/src/frontend/public/dist /opt/bridge/static
-COPY --from=gobuilder /go/src/github.com/openshift/console/pkg/graphql/schema.graphql /pkg/graphql/schema.graphql
+COPY --from=gobuilder /go/src/github.com/devops-simba/console/pkg/graphql/schema.graphql /pkg/graphql/schema.graphql
 
 WORKDIR /
 # doesn't require a root user.

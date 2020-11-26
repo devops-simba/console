@@ -1,6 +1,6 @@
 {
   "description": "OpenShift Web Console",
-  "repository": "https://github.com/openshift/console",
+  "repository": "https://github.com/devops-simba/console",
   "license": "Apache-2.0",
   "private": true,
   "workspaces": [

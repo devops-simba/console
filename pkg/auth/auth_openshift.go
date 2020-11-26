@@ -11,7 +11,7 @@ import (
 
 	"golang.org/x/oauth2"
 
-	"github.com/openshift/console/pkg/proxy"
+	"github.com/devops-simba/console/pkg/proxy"
 )
 
 // openShiftAuth implements OpenShift Authentication as defined in:

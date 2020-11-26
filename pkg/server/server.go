@@ -16,18 +16,18 @@ import (
 	"github.com/coreos/pkg/capnslog"
 	"github.com/coreos/pkg/health"
 
-	"github.com/openshift/console/pkg/auth"
-	helmhandlerspkg "github.com/openshift/console/pkg/helm/handlers"
-	"github.com/openshift/console/pkg/proxy"
-	"github.com/openshift/console/pkg/serverutils"
-	"github.com/openshift/console/pkg/terminal"
-	"github.com/openshift/console/pkg/version"
+	"github.com/devops-simba/console/pkg/auth"
+	helmhandlerspkg "github.com/devops-simba/console/pkg/helm/handlers"
+	"github.com/devops-simba/console/pkg/proxy"
+	"github.com/devops-simba/console/pkg/serverutils"
+	"github.com/devops-simba/console/pkg/terminal"
+	"github.com/devops-simba/console/pkg/version"
 
 	graphql "github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
 	"github.com/rawagner/graphql-transport-ws/graphqlws"
 
-	"github.com/openshift/console/pkg/graphql/resolver"
+	"github.com/devops-simba/console/pkg/graphql/resolver"
 )
 
 const (
@@ -51,7 +51,7 @@ const (
 )
 
 var (
-	plog = capnslog.NewPackageLogger("github.com/openshift/console", "server")
+	plog = capnslog.NewPackageLogger("github.com/devops-simba/console", "server")
 )
 
 type jsGlobals struct {

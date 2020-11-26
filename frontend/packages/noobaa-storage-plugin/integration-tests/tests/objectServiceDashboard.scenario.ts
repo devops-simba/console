@@ -173,7 +173,7 @@ if (isRGWPresent) {
       await expect(await PerformanceCard.serviceTypeItems.RGW.isPresent()).toBeTruthy();
     });
 
-    // Expand on this test after https://github.com/openshift/console/pull/6214 merges
+    // Expand on this test after https://github.com/devops-simba/console/pull/6214 merges
     xit('Check that RGW Performance Graph is visible', async () => {
       await click(PerformanceCard.serviceTypeDropdown.RGW);
       await browser.sleep(3 * SECOND);

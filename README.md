@@ -124,7 +124,7 @@ Use this token value to set the `BRIDGE_K8S_BEARER_TOKEN` environment variable w
 ## Operator
 
 In OpenShift 4.x, the console is installed and managed by the
-[console operator](https://github.com/openshift/console-operator/).
+[console operator](https://github.com/devops-simba/console-operator/).
 
 ## Hacking
 

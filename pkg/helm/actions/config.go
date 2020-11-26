@@ -12,7 +12,7 @@ import (
 )
 
 var settings = initSettings()
-var plog = capnslog.NewPackageLogger("github.com/openshift/console", "helm/actions")
+var plog = capnslog.NewPackageLogger("github.com/devops-simba/console", "helm/actions")
 
 type configFlagsWithTransport struct {
 	*genericclioptions.ConfigFlags

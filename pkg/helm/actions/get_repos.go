@@ -18,7 +18,7 @@ import (
 	corev1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	"sigs.k8s.io/yaml"
 
-	"github.com/openshift/console/pkg/crypto"
+	"github.com/devops-simba/console/pkg/crypto"
 )
 
 var (

@@ -15,7 +15,7 @@ rm -rf "$MY_DIR/.output"
 mkdir "$MY_DIR/.output"
 
 docker run -it --rm \
-    -v "$ROOT_DIR:/go/src/github.com/openshift/console/" \
+    -v "$ROOT_DIR:/go/src/github.com/devops-simba/console/" \
     -v "$YARN_CACHE:/usr/local/share/.cache" \
     -v "$MY_DIR:/scripts" \
     quay.io/coreos/tectonic-console-builder:v20 \

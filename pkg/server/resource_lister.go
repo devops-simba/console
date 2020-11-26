@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/openshift/console/pkg/serverutils"
+	"github.com/devops-simba/console/pkg/serverutils"
 )
 
 // ResourceLister handles resource requests

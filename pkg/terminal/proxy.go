@@ -18,7 +18,7 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	"github.com/openshift/console/pkg/auth"
+	"github.com/devops-simba/console/pkg/auth"
 )
 
 const (
@@ -38,7 +38,7 @@ const (
 	WorkspaceRestrictedAcccessAnnotation = "controller.devfile.io/restricted-access"
 )
 
-var log = capnslog.NewPackageLogger("github.com/openshift/console", "terminal")
+var log = capnslog.NewPackageLogger("github.com/devops-simba/console", "terminal")
 
 // Proxy provides handlers to handle terminal related requests
 type Proxy struct {

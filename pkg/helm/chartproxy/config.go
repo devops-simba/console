@@ -8,14 +8,14 @@ import (
 
 	"github.com/coreos/pkg/capnslog"
 
-	"github.com/openshift/console/pkg/bridge"
-	"github.com/openshift/console/pkg/crypto"
-	"github.com/openshift/console/pkg/proxy"
-	"github.com/openshift/console/pkg/server"
+	"github.com/devops-simba/console/pkg/bridge"
+	"github.com/devops-simba/console/pkg/crypto"
+	"github.com/devops-simba/console/pkg/proxy"
+	"github.com/devops-simba/console/pkg/server"
 )
 
 var (
-	log = capnslog.NewPackageLogger("github.com/openshift/console", "pkg/helm")
+	log = capnslog.NewPackageLogger("github.com/devops-simba/console", "pkg/helm")
 )
 
 type config struct {

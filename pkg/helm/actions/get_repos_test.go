@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/openshift/console/pkg/helm/actions/fake"
-	"github.com/openshift/console/pkg/helm/testdata"
+	"github.com/devops-simba/console/pkg/helm/actions/fake"
+	"github.com/devops-simba/console/pkg/helm/testdata"
 )
 
 var sampleRepoYaml = `

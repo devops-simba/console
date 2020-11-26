@@ -29,7 +29,7 @@ done
 docker run "${ENV_STR[@]}" --rm --net=host \
        --user="${BUILDER_RUN_USER}" \
        "${VOLUME_MOUNT[@]}" \
-       -v "$(pwd)":/go/src/github.com/openshift/console \
+       -v "$(pwd)":/go/src/github.com/devops-simba/console \
        --shm-size=512m \
-       -w /go/src/github.com/openshift/console \
+       -w /go/src/github.com/devops-simba/console \
        "$BUILDER_IMAGE" "$@"

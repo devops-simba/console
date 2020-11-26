@@ -8,7 +8,7 @@
 /fast-build/.yarn-cache
 /bin
 /gopath
-/Godeps/_workspace/src/github.com/openshift/console
+/Godeps/_workspace/src/github.com/devops-simba/console
 /frontend/.cache-loader
 /frontend/.webpack-cycles
 /frontend/__coverage__

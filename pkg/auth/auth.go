@@ -40,7 +40,7 @@ const (
 )
 
 var (
-	log = capnslog.NewPackageLogger("github.com/openshift/console", "auth")
+	log = capnslog.NewPackageLogger("github.com/devops-simba/console", "auth")
 
 	// Cache HTTP clients to avoid recreating them for each request to the
 	// OAuth server. The key is the ca.crt bytes cast to a string and the
