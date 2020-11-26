@@ -3,7 +3,9 @@
 .vscode
 .protractor-fail-fast
 .DS_Store
-/go.sum
+/fast-build/.code
+/fast-build/.output
+/fast-build/.yarn-cache
 /bin
 /gopath
 /Godeps/_workspace/src/github.com/openshift/console
@@ -18,3 +20,4 @@
 /frontend/yarn-error.log
 /frontend/gui_test_screenshots
 /frontend/@types
+/**/.vscode
