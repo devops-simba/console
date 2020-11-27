@@ -165,12 +165,12 @@
   },
   "devDependencies": {
     "@babel/core": "^7.10.3",
+    "@cypress/webpack-preprocessor": "^4.1.3",
     "@graphql-codegen/cli": "^1.15.1",
     "@graphql-codegen/typescript": "^1.15.1",
     "@graphql-codegen/typescript-graphql-files-modules": "^1.15.1",
     "@graphql-codegen/typescript-operations": "^1.15.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.1",
-    "@cypress/webpack-preprocessor": "^4.1.3",
     "@types/classnames": "^2.2.7",
     "@types/enzyme": "3.10.x",
     "@types/glob": "7.x",
@@ -203,8 +203,8 @@
     "cypress-multi-reporters": "^1.4.0",
     "enzyme": "3.10.x",
     "enzyme-adapter-react-16": "1.15.2",
-    "eslint-plugin-graphql": "^4.0.0",
     "eslint-plugin-cypress": "^2.10.3",
+    "eslint-plugin-graphql": "^4.0.0",
     "file-loader": "1.x",
     "find-up": "4.x",
     "fork-ts-checker-webpack-plugin": "0.x",
@@ -222,8 +222,8 @@
     "jest-transform-graphql": "^2.1.0",
     "lint-staged": "^10.2.2",
     "mini-css-extract-plugin": "0.4.x",
-    "mock-socket": "^9.0.3",
     "mocha-junit-reporter": "^1.23.3",
+    "mock-socket": "^9.0.3",
     "moment": "2.22.x",
     "monaco-editor-core": "0.20.0",
     "monaco-editor-webpack-plugin": "^1.9.0",
@@ -265,5 +265,6 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,gql,graphql}": "eslint --color --fix"
-  }
+  },
+  "version": "1.22.10"
 }
