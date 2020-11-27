@@ -3,7 +3,7 @@
 .vscode
 .protractor-fail-fast
 .DS_Store
-/fast-build/.code
+/fast-build/.build
 /fast-build/.output
 /fast-build/.yarn-cache
 /bin

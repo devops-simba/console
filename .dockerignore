@@ -1,5 +1,4 @@
-/fast-build/.yarn-cache
-/fast-build/.output
+/fast-build
 /bin
 /**/.cache-loader
 /**/node_modules

@@ -2,16 +2,14 @@
 
 CUR_DIR=`realpath .`
 MY_DIR=`realpath "$(dirname "$0")"`
-cd "$MY_DIR"
-
-session_id=`cat /proc/sys/kernel/random/uuid`
-
 ROOT_DIR=`realpath "$MY_DIR/.."`
 YARN_CACHE="/tmp/.yarn-cache"
-BUILD_DIR="/tmp/console-$session_id"
+#BUILD_DIR="/tmp/console-`cat /proc/sys/kernel/random/uuid`"
+BUILD_DIR="$MY_DIR/.build"
 OUTPUT_DIR="$MY_DIR/.output"
 IMAGE_TAG="mehbos/openshift-console-modified:4.7"
 
+cd "$MY_DIR"
 mkdir -p $YARN_CACHE
 mkdir -p "$BUILD_DIR"
 rm -rf "$OUTPUT_DIR"
