@@ -2,7 +2,7 @@ name: Build and push production image
 
 on:
   push:
-    branches: [ release-4.7 ]
+    branches: [ release-4.7, master ]
 
 jobs:
   build:
