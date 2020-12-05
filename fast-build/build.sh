@@ -20,7 +20,9 @@ build_application() {
   cp -r "$1/frontend/public/dist" "$OUTPUT_DIR" && \
   cp "$1/pkg/graphql/schema.graphql" "$OUTPUT_DIR" && \
   docker build --rm -t "$IMAGE_NAME:$IMAGE_TAG" -f "$SCRIPT_DIR/Dockerfile" "$OUTPUT_DIR"
+  RESULT=$?
   rm -rf "$OUTPUT_DIR"
+  return $RESULT
 }
 
 USERNAME="$1"
@@ -33,16 +35,21 @@ case "$2" in
     find "$BUILD_LOCATION" -type d -name node_modules -exec rm -rf {} +
     cp -r "$APP_DIR" "$BUILD_LOCATION"
     build_application "$BUILD_LOCATION"
+    RESULT=$?
     rm -rf "$BUILD_LOCATION"
   ;;
 
   *)
     echo "in place build(build inside the solution, will create some data in the solution)"
     build_application "$APP_DIR"
+    RESULT=$?
   ;;
 esac
 
-echo "Pushing image to image registry"
-docker login "registry.apps.internal.ic.cloud.snapp.ir" -u "${USERNAME:-mohammadmahdi.roozitalab}" -p `oc whoami -t`
-docker push "$IMAGE_NAME:$IMAGE_TAG"
-
+if [ $RESULT -eq 0 ]; then
+  echo "Pushing image to image registry"
+  docker login "registry.apps.internal.ic.cloud.snapp.ir" -u "${USERNAME:-mohammadmahdi.roozitalab}" -p `oc whoami -t`
+  docker push "$IMAGE_NAME:$IMAGE_TAG"
+else
+  echo "Failed to build frontend, exit code is $RESULT"
+fi

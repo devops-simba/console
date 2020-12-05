@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useFormikContext, FormikValues } from 'formik';
+// import { TextInputTypes } from '@patternfly/react-core';
 import { FormHelperText } from '@patternfly/react-core';
 import { DropdownField, DroppableFileInputField, CheckboxField } from '@console/shared';
 import {
@@ -43,37 +44,40 @@ const SecureRoute: React.FC = () => {
             helpText="Policy for traffic on insecure schemes like HTTP."
             fullWidth
           />
-          {tls.termination && tls.termination !== 'passthrough' && (
-            <>
-              <h3>Certificates</h3>
-              <FormHelperText isHidden={false}>
-                TLS certificates for edge and re-encrypt termination. If not specified, the
-                router&apos;s default certificate is used.
-              </FormHelperText>
-              <DroppableFileInputField
-                name="route.tls.certificate"
-                label="Certificate"
-                helpText="The PEM format certificate. Upload file by dragging &amp; dropping, selecting it, or pasting from the clipboard."
-              />
-              <DroppableFileInputField
-                name="route.tls.privateKey"
-                label="Private Key"
-                helpText="The PEM format key. Upload file by dragging &amp; dropping, selecting it, or pasting from the clipboard."
-              />
-              <DroppableFileInputField
-                name="route.tls.caCertificate"
-                label="CA Certificate"
-                helpText="The PEM format CA certificate chain. Upload file by dragging &amp; dropping, selecting it, or pasting from the clipboard."
-              />
-              {tls.termination === 'reencrypt' && (
+          {tls.termination &&
+            tls.termination !== 'passthrough' &&
+            tls.termination !== 'edgeUsingACME' &&
+            tls.termination !== 'reencryptUsingACME' && (
+              <>
+                <h3>Certificates</h3>
+                <FormHelperText isHidden={false}>
+                  TLS certificates for edge and re-encrypt termination. If not specified, the
+                  router&apos;s default certificate is used.
+                </FormHelperText>
                 <DroppableFileInputField
-                  name="route.tls.destinationCaCertificate"
-                  label="Destination CA Certificate"
-                  helpText="The PEM format CA certificate chain to validate the endpoint certificate for re-encrypt termination. Upload file by dragging &amp; dropping, selecting it, or pasting from the clipboard."
+                  name="route.tls.certificate"
+                  label="Certificate"
+                  helpText="The PEM format certificate. Upload file by dragging &amp; dropping, selecting it, or pasting from the clipboard."
                 />
-              )}
-            </>
-          )}
+                <DroppableFileInputField
+                  name="route.tls.privateKey"
+                  label="Private Key"
+                  helpText="The PEM format key. Upload file by dragging &amp; dropping, selecting it, or pasting from the clipboard."
+                />
+                <DroppableFileInputField
+                  name="route.tls.caCertificate"
+                  label="CA Certificate"
+                  helpText="The PEM format CA certificate chain. Upload file by dragging &amp; dropping, selecting it, or pasting from the clipboard."
+                />
+                {tls.termination === 'reencrypt' && (
+                  <DroppableFileInputField
+                    name="route.tls.destinationCaCertificate"
+                    label="Destination CA Certificate"
+                    helpText="The PEM format CA certificate chain to validate the endpoint certificate for re-encrypt termination. Upload file by dragging &amp; dropping, selecting it, or pasting from the clipboard."
+                  />
+                )}
+              </>
+            )}
         </>
       )}
     </>

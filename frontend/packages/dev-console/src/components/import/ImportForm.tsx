@@ -14,6 +14,7 @@ import { GitImportFormData, FirehoseList, ImportData, Resources } from './import
 import { createOrUpdateResources, handleRedirect } from './import-submit-utils';
 import { validationSchema } from './import-validation-utils';
 import { healthChecksProbeInitialData } from '../health-checks/health-checks-probe-utils';
+import { AppResources } from '../edit-application/edit-application-types';
 
 export interface ImportFormProps {
   namespace: string;
@@ -152,13 +153,40 @@ const ImportForm: React.FC<ImportFormProps & StateProps> = ({
     const createNewProject = projects.loaded && _.isEmpty(projects.data);
     const {
       project: { name: projectName },
+      route: {
+        routerName,
+        tls: { termination },
+      },
     } = values;
 
+    let appResources: AppResources = null;
+    if (termination === 'edgeUsingACME' || termination === 'reencryptUsingACME') {
+      appResources = {
+        editAppResource: {
+          loaded: true,
+          loadError: '',
+          data: {
+            metadata: {
+              labels: {
+                router: 'public',
+              },
+              annotations: {
+                'kubernetes.io/tls-acme': 'true',
+              },
+            },
+          },
+        },
+      };
+      values.route.tls.termination = termination === 'edgeUsingACME' ? 'edge' : 'reencrypt';
+    }
+    values.labels.router = routerName;
     const resourceActions = createOrUpdateResources(
       values,
       imageStream,
       createNewProject,
       true,
+      'create',
+      appResources,
     ).then(() => createOrUpdateResources(values, imageStream));
 
     if (contextualSource) {

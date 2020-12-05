@@ -1,0 +1,38 @@
+.co-create-service {
+  &__alert {
+    margin-bottom: 0;
+  }
+}
+
+.co-create-service__add-port-btn {
+  margin-bottom: 15px;
+}
+
+.co-create-service__block_label label {
+  display: block;
+}
+.co-create-service__block_label input {
+  min-width: 100%;
+}
+.co-create-service__headless_service input {
+  vertical-align: top;
+}
+.co-create-service__headless_service span {
+  margin-left: 5px;
+}
+
+.co-create-service-port-group {
+  border-top: 1px dashed dimgray;
+}
+// .co-create-service-port-group div {
+//   margin: 2px 2px;
+// }
+// .co-create-service-port_group_0 {
+//   background-color: inherit;
+// }
+// .co-create-service-port_group_1 {
+//   background-color: #F8F8F8;
+// }
+// .co-create-service-port_group_1 input {
+//   background-color: #F8F8F8;
+// }

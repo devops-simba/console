@@ -347,6 +347,17 @@ const AppContents_: React.FC<AppContentsProps> = ({ activePerspective }) => {
             />
 
             <LazyRoute
+              path="/k8s/ns/:ns/services/~new/form"
+              exact
+              kind="Service"
+              loader={() =>
+                import('./services/create-service' /* webpackChunkName: "create-service" */).then(
+                  (m) => m.CreateService,
+                )
+              }
+            />
+
+            <LazyRoute
               path="/k8s/ns/:ns/routes/~new/form"
               exact
               kind="Route"

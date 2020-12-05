@@ -47,7 +47,7 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
     hostname: '',
     path: '',
     service: null,
-    router: '',
+    router: 'internal',
     weight: 100,
     targetPort: '',
     termination: '',
@@ -96,6 +96,12 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
     });
   };
 
+  changeRouter = (router: string) => {
+    this.setState({
+      router: router,
+    });
+  };
+
   changeService = (serviceName: string) => {
     const service = _.find(this.state.services, { metadata: { name: serviceName } });
     const portOptions = getPortOptions(service);
@@ -106,12 +112,6 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
       targetPort: '',
     });
   };
-
-  changeRouter = (router: string) => {
-    this.setState({
-      router: router,
-    })
-  }
 
   changeTargetPort = (targetPort: string) =>
     this.setState({
@@ -136,6 +136,8 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
         // unset tls data if it was set
         newState.destinationCACertificate = '';
         break;
+      case 'edgeUsingACME':
+      case 'reencryptUsingACME':
       case 'passthrough':
         Object.assign(newState, {
           // unset tls data if it was set
@@ -184,9 +186,20 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
       alternateServices,
     } = this.state;
 
+    let usingACME = false;
+    let actualTermination = termination;
+    switch (termination) {
+      case 'edgeUsingACME':
+        usingACME = true;
+        actualTermination = 'edge';
+        break;
+      case 'reencryptUsingACME':
+        usingACME = true;
+        actualTermination = 'reencrypt';
+    }
     const tls = secure
       ? {
-          termination,
+          actualTermination,
           insecureEdgeTerminationPolicy,
           certificate,
           key,
@@ -195,13 +208,31 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
         }
       : null;
 
+    const acmeAnnotationTag = 'kubernetes.io/tls-acme';
     const serviceName = _.get(service, 'metadata.name');
-    const labels = _.get(service, 'metadata.labels');
-    labels['router'] = (router || 'internal').toLowerCase()
+
+    let labels = _.get(service, 'metadata.labels') || {};
+    labels['router'] = (router || 'internal').toLowerCase();
+    if (labels['router'] != 'public' && usingACME) {
+      this.setState({
+        error: 'ACME encryption is only available for public routers',
+      });
+      return;
+    }
+
+    let actualHostName = hostname;
+    if (!actualHostName || actualHostName.endsWith('ic.cloud.snapp.ir')) {
+      actualHostName = name + '-' + namespace + '.apps.' + labels['router'] + '.ic.cloud.snapp.ir';
+    }
+
+    let annotations = {};
+    if (usingACME) {
+      annotations[acmeAnnotationTag] = "true";
+    }
 
     // If the port is unnamed, there is only one port. Use the port number.
     const targetPort =
-      selectedPort === UNNAMED_PORT_KEY ? _.get(service, 'spec.ports[0].port') : selectedPort;
+      selectedPort === UNNAMED_PORT_KEY ? _.get(service, 'spec.ports[0].targetPort') : selectedPort;
 
     const alternateBackends = _.filter(alternateServices, 'name').map(
       (serviceData: AlternateServiceEntryType) => {
@@ -235,6 +266,14 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
         },
       },
     };
+    route.spec.host = actualHostName;
+    route.metadata.annotations = annotations;
+    //if (usingACME && _.get(route.metadata, 'annotations[' + acmeAnnotationTag + ']') !== "true") {
+    //  this.setState({
+    //    error: 'Invalid ACME annotation: ' + JSON.stringify(route.metadata),
+    //  });
+    //  return;
+    //}
 
     if (!_.isEmpty(alternateBackends)) {
       route.spec.alternateBackends = alternateBackends;
@@ -320,6 +359,8 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
       edge: 'Edge',
       passthrough: 'Passthrough',
       reencrypt: 'Re-encrypt',
+      edgeUsingACME: 'Edge using ACME certificate',
+      reencryptUsingACME: 'Re-encrypt using ACME certificate',
     };
     const insecureTrafficTypes = {
       None: 'None',
@@ -586,7 +627,7 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
                       <p>Policy for traffic on insecure schemes like HTTP.</p>
                     </div>
                   </div>
-                  {termination && termination !== 'passthrough' && (
+                  {termination && termination !== 'passthrough' && termination !== 'edgeUsingACME' && termination !== 'reencryptUsingACME' && (
                     <>
                       <h2 className="h3">Certificates</h2>
                       <div className="help-block">
@@ -743,6 +784,7 @@ export type CreateRouteState = {
   hostname: string;
   path: string;
   service: K8sResourceKind;
+  router: string;
   weight: number;
   targetPort: string;
   termination: string;

@@ -4,6 +4,7 @@ import { useFormikContext, FormikValues } from 'formik';
 import { TextInputTypes } from '@patternfly/react-core';
 import { InputField, DropdownField } from '@console/shared';
 import { makePortName } from '../../../utils/imagestream-utils';
+import { AvailableRouters } from '../import-types';
 
 const CreateRoute: React.FC = () => {
   const {
@@ -55,6 +56,14 @@ const CreateRoute: React.FC = () => {
           fullWidth
         />
       )}
+      <DropdownField
+        name="route.routerName"
+        label="Router"
+        items={AvailableRouters}
+        title="Select a router"
+        helpText="Router that should be used for this route."
+        fullWidth
+      />
     </>
   );
 };
