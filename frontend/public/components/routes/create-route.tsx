@@ -220,10 +220,10 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
       return;
     }
 
-    let actualHostName = hostname;
-    if (!actualHostName || actualHostName.endsWith('ic.cloud.snapp.ir')) {
-      actualHostName = name + '-' + namespace + '.apps.' + labels['router'] + '.ic.cloud.snapp.ir';
-    }
+    // let actualHostName = hostname;
+    // if (!actualHostName || actualHostName.endsWith('ic.cloud.snapp.ir')) {
+    //   actualHostName = name + '-' + namespace + '.apps.' + labels['router'] + '.ic.cloud.snapp.ir';
+    // }
 
     let annotations = {};
     if (usingACME) {
@@ -266,7 +266,7 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
         },
       },
     };
-    route.spec.host = actualHostName;
+    route.spec.host = hostname;
     route.metadata.annotations = annotations;
     //if (usingACME && _.get(route.metadata, 'annotations[' + acmeAnnotationTag + ']') !== "true") {
     //  this.setState({
