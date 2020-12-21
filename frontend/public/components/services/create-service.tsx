@@ -34,7 +34,7 @@ export class CreateService extends React.Component<{}, CreateServiceState> {
     selectedComponentIndex: 0,
     loadedResources: sourceModels.map(() => null) as K8sResourceKind[][],
     type: 'ClusterIP' as ExposeServiceType,
-    loadbalancerLocation: 'irancell' as LoadBalancerLocationType,
+    loadbalancerZone: 'irancell' as LoadBalancerZoneType,
     externalName: '',
     headlessService: false,
     sessionAffinity: 'None' as ExposeServiceAffinityType,
@@ -79,9 +79,9 @@ export class CreateService extends React.Component<{}, CreateServiceState> {
       type: value,
     });
   };
-  changeLoadbalancerLocation = (value: LoadBalancerLocationType) => {
+  changeLoadbalancerZone = (value: LoadBalancerZoneType) => {
     this.setState({
-      loadbalancerLocation: value,
+      loadbalancerZone: value,
     });
   };
   changeSessionAffinity = (value: ExposeServiceAffinityType) => {
@@ -164,7 +164,7 @@ export class CreateService extends React.Component<{}, CreateServiceState> {
       None: 'None',
       Client: 'Client',
     };
-    const loadbalancerLocations = {
+    const loadbalancerZones = {
       irancell: 'Irancell',
       afranet: 'Afranet',
     };
@@ -175,7 +175,7 @@ export class CreateService extends React.Component<{}, CreateServiceState> {
       selectedComponentIndex,
       loadedResources,
       type,
-      loadbalancerLocation,
+      loadbalancerZone,
       externalName,
       headlessService,
       sessionAffinity,
@@ -268,19 +268,19 @@ export class CreateService extends React.Component<{}, CreateServiceState> {
               </div>
             </div>
             {type === 'LoadBalancer' && (
-              <div className="form-group co-create-service__LoadBalancer_location">
-                <label htmlFor="loadbalancerLocation">LoadBalancer location</label>
+              <div className="form-group co-create-service__LoadBalancer_zone">
+                <label htmlFor="loadbalancerZone">LoadBalancer zone</label>
                 <Dropdown
-                  id="loadBalancelLocation"
-                  name="loadBalancelLocation"
-                  items={loadbalancerLocations}
-                  selectedKey={loadbalancerLocation}
+                  id="loadBalancelZone"
+                  name="loadBalancelZone"
+                  items={loadbalancerZones}
+                  selectedKey={loadbalancerZone}
                   dropDownClassName="dropdown--full-width"
-                  onChange={this.changeLoadbalancerLocation}
+                  onChange={this.changeLoadbalancerZone}
                   required
                 />
-                <div className="help-block" id="loadbalancerLocation-help">
-                  Location of this load balancer
+                <div className="help-block" id="loadbalancerZone-help">
+                  Zone of this load balancer
                 </div>
               </div>
             )}
@@ -385,7 +385,7 @@ export class CreateService extends React.Component<{}, CreateServiceState> {
       name,
       namespace,
       type,
-      loadbalancerLocation,
+      loadbalancerZone,
       externalName,
       headlessService,
       selectedModelIndex,
@@ -452,7 +452,7 @@ export class CreateService extends React.Component<{}, CreateServiceState> {
       if (!service.metadata.annotations) {
         service.metadata.annotations = {};
       }
-      service.metadata.annotations[metallbAnnotation] = loadbalancerLocation;
+      service.metadata.annotations[metallbAnnotation] = loadbalancerZone;
       service.spec.externalTrafficPolicy = 'Local';
     }
     if (headlessService) {
@@ -721,7 +721,7 @@ export type SourceSelectorProps = {
 export type ExposeServiceAffinityType = 'None' | 'Client';
 export type ExposeServiceType = 'ClusterIP' | 'LoadBalancer' | 'ExternalName' /* | 'NodePort' */;
 export type ServicePortType = 'TCP' | 'UDP' | 'SCTP' /* | 'NodePort' */;
-export type LoadBalancerLocationType = 'irancell' | 'afranet';
+export type LoadBalancerZoneType = 'irancell' | 'afranet';
 export type ServicePortNoKey = {
   name?: string;
   protocol: ServicePortType;
@@ -738,7 +738,7 @@ export type CreateServiceState = {
   selectedModelIndex: number;
   selectedComponentIndex: number;
   type: ExposeServiceType;
-  loadbalancerLocation: LoadBalancerLocationType;
+  loadbalancerZone: LoadBalancerZoneType;
   externalName: string;
   headlessService: boolean;
   sessionAffinity: ExposeServiceAffinityType;
