@@ -34,6 +34,7 @@ export class CreateService extends React.Component<{}, CreateServiceState> {
     selectedComponentIndex: 0,
     loadedResources: sourceModels.map(() => null) as K8sResourceKind[][],
     type: 'ClusterIP' as ExposeServiceType,
+    loadbalancerLocation: 'irancell' as LoadBalancerLocationType,
     externalName: '',
     headlessService: false,
     sessionAffinity: 'None' as ExposeServiceAffinityType,
@@ -76,6 +77,11 @@ export class CreateService extends React.Component<{}, CreateServiceState> {
   changeServiceType = (value: ExposeServiceType) => {
     this.setState({
       type: value,
+    });
+  };
+  changeLoadbalancerLocation = (value: LoadBalancerLocationType) => {
+    this.setState({
+      loadbalancerLocation: value,
     });
   };
   changeSessionAffinity = (value: ExposeServiceAffinityType) => {
@@ -158,6 +164,10 @@ export class CreateService extends React.Component<{}, CreateServiceState> {
       None: 'None',
       Client: 'Client',
     };
+    const loadbalancerLocations = {
+      irancell: 'Irancell',
+      afranet: 'Afranet',
+    };
     const {
       name,
       namespace,
@@ -165,6 +175,7 @@ export class CreateService extends React.Component<{}, CreateServiceState> {
       selectedComponentIndex,
       loadedResources,
       type,
+      loadbalancerLocation,
       externalName,
       headlessService,
       sessionAffinity,
@@ -256,6 +267,23 @@ export class CreateService extends React.Component<{}, CreateServiceState> {
                 Type of the service
               </div>
             </div>
+            {type === 'LoadBalancer' && (
+              <div className="form-group co-create-service__LoadBalancer_location">
+                <label htmlFor="loadbalancerLocation">LoadBalancer location</label>
+                <Dropdown
+                  id="loadBalancelLocation"
+                  name="loadBalancelLocation"
+                  items={loadbalancerLocations}
+                  selectedKey={loadbalancerLocation}
+                  dropDownClassName="dropdown--full-width"
+                  onChange={this.changeLoadbalancerLocation}
+                  required
+                />
+                <div className="help-block" id="loadbalancerLocation-help">
+                  Location of this load balancer
+                </div>
+              </div>
+            )}
             {type === 'ExternalName' && (
               <div className="form-group co-create-service__external_name">
                 <label htmlFor="externalName" className="co-required">
@@ -357,6 +385,7 @@ export class CreateService extends React.Component<{}, CreateServiceState> {
       name,
       namespace,
       type,
+      loadbalancerLocation,
       externalName,
       headlessService,
       selectedModelIndex,
@@ -419,6 +448,11 @@ export class CreateService extends React.Component<{}, CreateServiceState> {
       service.spec.externalName = externalName;
     }
     if (type === 'LoadBalancer') {
+      const metallbAnnotation = 'metallb.universe.tf/address-pool';
+      if (!service.metadata.annotations) {
+        service.metadata.annotations = {};
+      }
+      service.metadata.annotations[metallbAnnotation] = loadbalancerLocation;
       service.spec.externalTrafficPolicy = 'Local';
     }
     if (headlessService) {
@@ -687,6 +721,7 @@ export type SourceSelectorProps = {
 export type ExposeServiceAffinityType = 'None' | 'Client';
 export type ExposeServiceType = 'ClusterIP' | 'LoadBalancer' | 'ExternalName' /* | 'NodePort' */;
 export type ServicePortType = 'TCP' | 'UDP' | 'SCTP' /* | 'NodePort' */;
+export type LoadBalancerLocationType = 'irancell' | 'afranet';
 export type ServicePortNoKey = {
   name?: string;
   protocol: ServicePortType;
@@ -703,6 +738,7 @@ export type CreateServiceState = {
   selectedModelIndex: number;
   selectedComponentIndex: number;
   type: ExposeServiceType;
+  loadbalancerLocation: LoadBalancerLocationType;
   externalName: string;
   headlessService: boolean;
   sessionAffinity: ExposeServiceAffinityType;
