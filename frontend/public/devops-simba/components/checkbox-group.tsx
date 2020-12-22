@@ -59,7 +59,7 @@ export class ItemCheckbox extends React.Component<ItemCheckboxProps, ItemCheckbo
         name={`cb-item-${item.getId()}`}
         isDisabled={!item.getEnabled()}
         isChecked={checked}
-        label={!item.getDisplayName()}
+        label={item.getDisplayName()}
         onChange={this._handleChange.bind(this)}
       />
     );
