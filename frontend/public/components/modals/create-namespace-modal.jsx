@@ -2,11 +2,14 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { FLAGS } from '@console/shared';
+
 import { k8sCreate, referenceFor } from '../../module/k8s';
 import { NamespaceModel, ProjectRequestModel, NetworkPolicyModel } from '../../models';
 import { createModalLauncher, ModalTitle, ModalBody, ModalSubmitFooter } from '../factory/modal';
 import { Dropdown, history, PromiseComponent, resourceObjPath, SelectorInput } from '../utils';
 import { setFlag } from '../../actions/features';
+import { availableZones, projectEnvironments, knownLabels } from '../../devops-simba/constants';
+import { updateNodeSelector, createZoneCheckbox } from '../../devops-simba/utils';
 
 const allow = 'allow';
 const deny = 'deny';
@@ -33,6 +36,10 @@ const CreateNamespaceModal = connect(
       this.state.np = allow;
       this.handleChange = this.handleChange.bind(this);
       this.onLabels = this.onLabels.bind(this);
+      if (this.props.createProject) {
+        this.state.selectedZones = [...availableZones.filter((z) => z.enabled)];
+        this.state.env = 'test';
+      }
     }
 
     handleChange(e) {
@@ -56,14 +63,18 @@ const CreateNamespaceModal = connect(
 
     createProject() {
       const { hideStartGuide } = this.props;
-      const { name, displayName, description } = this.state;
+      const { name, displayName, description, selectedZones, env } = this.state;
       const project = {
         metadata: {
           name,
+          labels: {
+            [knownLabels.projectEnvironment]: env,
+          },
         },
         displayName,
         description,
       };
+      updateNodeSelector(project, selectedZones);
       return k8sCreate(ProjectRequestModel, project).then((obj) => {
         // Immediately update the start guide flag to avoid the empty state
         // message from displaying when projects watch is slow.
@@ -163,6 +174,32 @@ const CreateNamespaceModal = connect(
                     onChange={this.handleChange}
                     value={this.state.description || ''}
                   />
+                </div>
+              </div>
+            )}
+            {this.props.createProject && (
+              <div className="form-group">
+                <label htmlFor="dropdown-environment" className="control-label">
+                  Environment
+                </label>
+                <div className="modal-body__environment">
+                  <Dropdown
+                    id="dropdown-environment"
+                    items={projectEnvironments}
+                    selectedKey={this.props.env}
+                    dropDownClassName="dropdown--full-width"
+                    onChange={(env) => this.setState({ env })}
+                  />
+                </div>
+              </div>
+            )}
+            {this.props.createProject && (
+              <div className="form-group">
+                <label htmlFor="checkbox-zones" className="control-label">
+                  Zones
+                </label>
+                <div className="modal-body__zones">
+                  {availableZones.map((z) => createZoneCheckbox(z, self.state.selectedZones))}
                 </div>
               </div>
             )}
