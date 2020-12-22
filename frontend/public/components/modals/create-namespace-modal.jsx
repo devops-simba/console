@@ -186,7 +186,7 @@ const CreateNamespaceModal = connect(
                   <Dropdown
                     id="dropdown-environment"
                     items={projectEnvironments}
-                    selectedKey={this.props.env}
+                    selectedKey={this.state.env}
                     dropDownClassName="dropdown--full-width"
                     onChange={(env) => this.setState({ env })}
                   />
@@ -199,7 +199,7 @@ const CreateNamespaceModal = connect(
                   Zones
                 </label>
                 <div className="modal-body__zones">
-                  {availableZones.map((z) => createZoneCheckbox(z, self.state.selectedZones))}
+                  {availableZones.map((z) => createZoneCheckbox(z, this.state.selectedZones))}
                 </div>
               </div>
             )}
