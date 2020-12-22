@@ -5,11 +5,11 @@ import { ToggleOnIcon, ToggleOffIcon } from '@patternfly/react-icons';
 export class FancyCheckbox extends React.Component<FancyCheckboxProps, FancyCheckboxState> {
   constructor(props) {
     super(props);
-    this.setState({
+    this.state = {
       checked: this.props.isChecked,
       checkedImage: this.props.checkedImage || <ToggleOnIcon />,
       uncheckedImage: this.props.uncheckedImage || <ToggleOffIcon />,
-    });
+    };
   }
 
   _handleChange() {
