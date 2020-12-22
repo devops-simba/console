@@ -11,5 +11,5 @@ export function updateNodeSelector(
   }
   model.annotations[
     knownAnnotations.openshiftNodeSelector
-  ] = `topology.kubernetes.io/zone${zoneNames.join(',')}`;
+  ] = `topology.kubernetes.io/zone=${zoneNames.join(',')}`;
 }
