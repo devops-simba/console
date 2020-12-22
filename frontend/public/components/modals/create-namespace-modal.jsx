@@ -62,7 +62,7 @@ const CreateNamespaceModal = connect(
       return k8sCreate(NamespaceModel, namespace);
     }
 
-    createProject() {
+    async createProject() {
       const { hideStartGuide } = this.props;
       const { name, displayName, description, selectedZones, env } = this.state;
       const project = {
@@ -75,13 +75,32 @@ const CreateNamespaceModal = connect(
         displayName,
         description,
       };
+
+      if (selectedZones.length === 0) {
+        this.setState({
+          error: 'You must at least select one zone',
+        });
+        return null;
+      }
+
       updateNodeSelector(project, selectedZones);
-      return k8sCreate(ProjectRequestModel, project).then((obj) => {
+
+      try {
+        this.setState({
+          inProgress: true,
+        });
+        const obj = await k8sCreate(ProjectRequestModel, project);
         // Immediately update the start guide flag to avoid the empty state
         // message from displaying when projects watch is slow.
         hideStartGuide();
         return obj;
-      });
+      } catch (err) {
+        this.setState({
+          inProgress: false,
+          error: err.message,
+        });
+        return null;
+      }
     }
 
     _submit(event) {

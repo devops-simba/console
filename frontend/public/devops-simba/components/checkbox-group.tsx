@@ -20,12 +20,16 @@ export class ItemCheckbox extends React.Component<ItemCheckboxProps, ItemCheckbo
     const backend = this.props.backend;
     return backend.map((i) => `'${i.getId()}: ${i.getDisplayName()}`).join(', ');
   }
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  /* eslint-disable no-unused-vars */
   _debug(message?: string) {
+    /*
     let log = `backend: [${this._debugBackend()}], item: '${this.props.item.getId()}: ${this.props.item.getDisplayName()}'`;
     if (message) {
       log = `${message} => ${log}`;
     }
     console.log(log);
+    //*/
   }
   _handleChange(checked: boolean, e: React.FormEvent<HTMLInputElement>) {
     const { backend, item, onChange } = this.props;
@@ -51,9 +55,11 @@ export class ItemCheckbox extends React.Component<ItemCheckboxProps, ItemCheckbo
     this._debug('rendring');
     return (
       <Checkbox
-        id={`cb-zone-${item.getId()}`}
+        id={`cb-item-${item.getId()}`}
+        name={`cb-item-${item.getId()}`}
         isDisabled={!item.getEnabled()}
         isChecked={checked}
+        label={!item.getDisplayName()}
         onChange={this._handleChange.bind(this)}
       />
     );
