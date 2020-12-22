@@ -9,7 +9,8 @@ import { createModalLauncher, ModalTitle, ModalBody, ModalSubmitFooter } from '.
 import { Dropdown, history, PromiseComponent, resourceObjPath, SelectorInput } from '../utils';
 import { setFlag } from '../../actions/features';
 import { availableZones, projectEnvironments, knownLabels } from '../../devops-simba/constants';
-import { updateNodeSelector, createZoneCheckbox } from '../../devops-simba/utils';
+import { updateNodeSelector } from '../../devops-simba/utils';
+import { ZoneCheckbox } from '../../devops-simba/components/zone-checkbox';
 
 const allow = 'allow';
 const deny = 'deny';
@@ -118,6 +119,7 @@ const CreateNamespaceModal = connect(
         [allow]: 'No restrictions',
         [deny]: 'Deny all inbound traffic',
       };
+      /* eslint-disable react/jsx-key */
       return (
         <form
           onSubmit={this._submit.bind(this)}
@@ -199,7 +201,9 @@ const CreateNamespaceModal = connect(
                   Zones
                 </label>
                 <div className="modal-body__zones">
-                  {availableZones.map((z) => createZoneCheckbox(z, this.state.selectedZones))}
+                  {availableZones.map((z) => (
+                    <ZoneCheckbox zone={z} backend={this.state.selectedZones} />
+                  ))}
                 </div>
               </div>
             )}
