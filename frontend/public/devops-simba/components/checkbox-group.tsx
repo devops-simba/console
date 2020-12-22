@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Checkbox } from '@patternfly/react-core';
+import { FancyCheckbox } from './fancy-checkbox';
+//import { Checkbox } from '@patternfly/react-core';
 
 export interface CheckboxItem {
   getId: () => string;
@@ -31,7 +32,7 @@ export class ItemCheckbox extends React.Component<ItemCheckboxProps, ItemCheckbo
     console.log(log);
     //*/
   }
-  _handleChange(checked: boolean, e: React.FormEvent<HTMLInputElement>) {
+  _handleChange(checked: boolean) {
     const { backend, item, onChange } = this.props;
     this._debug(`status changed(checked=${checked})`);
     if (checked) {
@@ -46,7 +47,7 @@ export class ItemCheckbox extends React.Component<ItemCheckboxProps, ItemCheckbo
     }
     this._debug(`status updated(checked=${checked})`);
     this.setState({ checked });
-    onChange && onChange(checked, e);
+    onChange && onChange(checked);
   }
   render() {
     const { item } = this.props;
@@ -54,7 +55,7 @@ export class ItemCheckbox extends React.Component<ItemCheckboxProps, ItemCheckbo
 
     this._debug('rendring');
     return (
-      <Checkbox
+      <FancyCheckbox
         id={`cb-item-${item.getId()}`}
         name={`cb-item-${item.getId()}`}
         isDisabled={!item.getEnabled()}
@@ -68,7 +69,7 @@ export class ItemCheckbox extends React.Component<ItemCheckboxProps, ItemCheckbo
 export class ItemCheckboxProps {
   item: CheckboxItem;
   backend: CheckboxItem[];
-  onChange?: (checked: boolean, event: React.FormEvent<HTMLInputElement>) => void;
+  onChange?: (checked: boolean) => void;
 }
 export class ItemCheckboxState {
   checked: boolean;

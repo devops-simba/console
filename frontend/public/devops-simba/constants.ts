@@ -17,5 +17,5 @@ export const knownAnnotations = {
 };
 
 export const knownLabels = {
-  projectEnvironment: 'project-environment',
+  projectEnvironment: 'environment',
 };
