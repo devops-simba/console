@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { FancyCheckbox } from './fancy-checkbox';
-//import { Checkbox } from '@patternfly/react-core';
+import { Flex, FlexItem, Switch } from '@patternfly/react-core';
 
 export interface CheckboxItem {
   getId: () => string;
@@ -55,7 +54,7 @@ export class ItemCheckbox extends React.Component<ItemCheckboxProps, ItemCheckbo
 
     this._debug('rendring');
     return (
-      <FancyCheckbox
+      <Switch
         id={`cb-item-${item.getId()}`}
         name={`cb-item-${item.getId()}`}
         isDisabled={!item.getEnabled()}
@@ -78,11 +77,13 @@ export class ItemCheckboxState {
 /* eslint-disable react/jsx-key */
 export const CheckboxGroup: React.FC<CheckboxGroupProps> = (props) => {
   return (
-    <>
+    <Flex>
       {props.availableItems.map((i) => (
-        <ItemCheckbox backend={props.selectedItems} item={i} />
+        <FlexItem>
+          <ItemCheckbox backend={props.selectedItems} item={i} />
+        </FlexItem>
       ))}
-    </>
+    </Flex>
   );
 };
 export class CheckboxGroupProps {
