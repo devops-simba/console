@@ -85,22 +85,14 @@ const CreateNamespaceModal = connect(
 
       updateNodeSelector(project, selectedZones);
 
-      try {
-        this.setState({
-          inProgress: true,
-        });
-        const obj = await k8sCreate(ProjectRequestModel, project);
-        // Immediately update the start guide flag to avoid the empty state
-        // message from displaying when projects watch is slow.
-        hideStartGuide();
-        return obj;
-      } catch (err) {
-        this.setState({
-          inProgress: false,
-          error: err.message,
-        });
-        return null;
-      }
+      this.setState({
+        inProgress: true,
+      });
+      const obj = await k8sCreate(ProjectRequestModel, project);
+      // Immediately update the start guide flag to avoid the empty state
+      // message from displaying when projects watch is slow.
+      hideStartGuide();
+      return obj;
     }
 
     _submit(event) {
@@ -118,14 +110,19 @@ const CreateNamespaceModal = connect(
         });
       }
 
-      this.handlePromise(promise).then((obj) => {
-        close();
-        if (onSubmit) {
-          onSubmit(obj);
-        } else {
-          history.push(resourceObjPath(obj, referenceFor(obj)));
-        }
-      });
+      /* eslint-disable @typescript-eslint/no-unused-vars */
+      /* eslint-disable no-unused-vars */
+      this.handlePromise(promise).then(
+        (obj) => {
+          close();
+          if (onSubmit) {
+            onSubmit(obj);
+          } else {
+            history.push(resourceObjPath(obj, referenceFor(obj)));
+          }
+        },
+        (err) => {},
+      );
     }
 
     onLabels(labels) {
