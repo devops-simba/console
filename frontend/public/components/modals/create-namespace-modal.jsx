@@ -38,7 +38,8 @@ const CreateNamespaceModal = connect(
       this.handleChange = this.handleChange.bind(this);
       this.onLabels = this.onLabels.bind(this);
       if (this.props.createProject) {
-        this.state.selectedZones = [...availableZones.filter((z) => z.enabled)];
+        this.state.availableZones = [...availableZones.filter((z) => z.enabled)];
+        this.state.selectedZones = [...this.state.availableZones];
         this.state.env = 'test';
       }
     }
@@ -64,7 +65,11 @@ const CreateNamespaceModal = connect(
 
     async createProject() {
       const { hideStartGuide } = this.props;
-      const { name, displayName, description, selectedZones, env } = this.state;
+      const { name, displayName, selectedZones, description, env } = this.state;
+
+      // @@https://jira.snapp.ir/browse/DEVT-419
+      const creationHint = env[0] + selectedZones.map((z) => z.indicator).join('');
+
       const project = {
         metadata: {
           name,
@@ -73,7 +78,7 @@ const CreateNamespaceModal = connect(
           },
         },
         displayName,
-        description,
+        description: `${description}-${creationHint}`,
       };
 
       if (selectedZones.length === 0) {
@@ -217,7 +222,7 @@ const CreateNamespaceModal = connect(
                 </label>
                 <div className="modal-body__zones">
                   <CheckboxGroup
-                    availableItems={availableZones}
+                    availableItems={this.state.availableZones}
                     selectedItems={this.state.selectedZones}
                   />
                 </div>

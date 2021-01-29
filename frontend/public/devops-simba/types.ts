@@ -1,5 +1,10 @@
 export class Zone {
-  constructor(public name: string, public displayName: string, public enabled: boolean = true) {}
+  constructor(
+    public name: string,
+    public displayName: string,
+    public indicator: string,
+    public enabled: boolean = true,
+  ) {}
 
   getId() {
     return this.name;
