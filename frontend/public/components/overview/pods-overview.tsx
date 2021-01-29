@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Alert, AlertActionLink } from '@patternfly/react-core';
 import { Status } from '@console/shared';
 import { ResourceLink, resourcePath, SidebarSectionHeading } from '../utils';
-import { podPhase, PodKind, K8sResourceKind, referenceFor } from '../../module/k8s';
+import { podPhase, podZone, PodKind, K8sResourceKind, referenceFor } from '../../module/k8s';
 
 const kind: string = 'Pod';
 const MAX_PODS: number = 3;
@@ -87,6 +87,7 @@ const PodOverviewItem: React.FC<PodOverviewItemProps> = ({ pod }) => {
   const {
     metadata: { name, namespace },
   } = pod;
+  const zone = podZone(pod);
   const phase = podPhase(pod);
 
   return (
@@ -95,6 +96,7 @@ const PodOverviewItem: React.FC<PodOverviewItemProps> = ({ pod }) => {
         <span className="col-xs-6">
           <ResourceLink kind={kind} name={name} namespace={namespace} />
         </span>
+        <span className="col-xs-3">{zone}</span>
         <span className="col-xs-3">
           <Status status={phase} />
         </span>

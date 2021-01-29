@@ -1,6 +1,7 @@
 import * as _ from 'lodash-es';
 
 import { ContainerSpec, ContainerStatus, PodKind, Volume, VolumeMount } from './types';
+import { findNodeZone } from '../../devops-simba/utils';
 
 const getRestartPolicy = (pod: PodKind) =>
   _.find(
@@ -289,4 +290,21 @@ export const podPhaseFilterReducer = (pod: PodKind): PodPhase => {
     return 'CrashLoopBackOff';
   }
   return _.get(pod, 'status.phase', 'Unknown');
+};
+
+// Get Zone of a pod
+export const podZone = (pod: PodKind): string => {
+  if (!pod || !pod.spec) {
+    return '';
+  }
+
+  if (!pod.spec.nodeName) {
+    return '';
+  }
+
+  const zone = findNodeZone(pod.spec.nodeName);
+  if (!zone) {
+    return '';
+  }
+  return zone.displayName;
 };

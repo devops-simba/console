@@ -15,6 +15,7 @@ import { coFetchJSON } from '../co-fetch';
 import { ContainerSpec, K8sResourceKindReference, PodKind, referenceForModel } from '../module/k8s';
 import {
   getRestartPolicyLabel,
+  podZone,
   podPhase,
   podPhaseFilterReducer,
   podReadiness,
@@ -111,6 +112,11 @@ const podColumnInfo = Object.freeze({
     id: 'namespace',
     title: 'Namespace',
   },
+  zone: {
+    classes: '',
+    id: 'zone',
+    title: 'Zone',
+  },
   status: {
     classes: classNames('pf-m-hidden', 'pf-m-visible-on-sm'),
     id: 'status',
@@ -187,6 +193,13 @@ const getHeader = (showNodes) => {
         sortField: 'metadata.namespace',
         transforms: [sortable],
         props: { className: podColumnInfo.namespace.classes },
+      },
+      {
+        title: podColumnInfo.zone.title,
+        id: podColumnInfo.zone.id,
+        sortFunc: 'podZone',
+        transforms: [sortable],
+        props: { className: podColumnInfo.zone.classes },
       },
       {
         title: podColumnInfo.status.title,
@@ -292,6 +305,7 @@ const PodTableRow = connect<PodTableRowPropsFromState, null, PodTableRowProps>(p
   }: PodTableRowProps & PodTableRowPropsFromState) => {
     const { name, namespace, creationTimestamp, labels } = pod.metadata;
     const { readyCount, totalContainers } = podReadiness(pod);
+    const zone = podZone(pod);
     const phase = podPhase(pod);
     const restarts = podRestarts(pod);
     const bytes: number = _.get(metrics, ['memory', namespace, name]);
@@ -310,6 +324,13 @@ const PodTableRow = connect<PodTableRowPropsFromState, null, PodTableRowProps>(p
           columnID={podColumnInfo.namespace.id}
         >
           <ResourceLink kind="Namespace" name={namespace} />
+        </TableData>
+        <TableData
+          className={classNames(podColumnInfo.zone.classes, 'co-break-word')}
+          columns={columns}
+          columnID={podColumnInfo.zone.id}
+        >
+          {zone}
         </TableData>
         <TableData
           className={podColumnInfo.status.classes}

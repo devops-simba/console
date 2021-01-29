@@ -7,7 +7,7 @@ build_application() {
   YARN_CACHE="/tmp/.yarn-cache"
   OUTPUT_DIR="$SCRIPT_DIR/.output"
   IMAGE_NAME="registry.apps.internal.ic.cloud.snapp.ir/openshift-console/openshift-console-modified"
-  IMAGE_TAG="4.8.6"
+  IMAGE_TAG="4.8.8"
 
   app_location="$1"
   mkdir -p "$OUTPUT_DIR"
