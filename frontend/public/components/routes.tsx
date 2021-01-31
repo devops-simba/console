@@ -26,6 +26,7 @@ import {
   RouteIngress,
   RouteTarget,
   K8sResourceCondition,
+  routeRouter,
 } from '../module/k8s';
 import { RouteModel } from '../models';
 import { Conditions } from './conditions';
@@ -143,6 +144,12 @@ export const RouteStatus: React.FC<RouteStatusProps> = ({ obj: route }) => {
 };
 RouteStatus.displayName = 'RouteStatus';
 
+export const RouteRouter: React.FC<RouteStatusProps> = ({ obj: route }) => {
+  const router: string = routeRouter(route);
+  return <Status status={router} />;
+};
+RouteRouter.displayName = 'Router';
+
 const tableColumnClasses = [
   '',
   '',
@@ -233,6 +240,9 @@ const RouteTableRow: RowFunction<RouteKind> = ({ obj: route, index, key, style }
           namespace={route.metadata.namespace}
           title={route.spec.to.name}
         />
+      </TableData>
+      <TableData className={tableColumnClasses[4]}>
+        <RouteRouter obj={route} />
       </TableData>
       <TableData className={tableColumnClasses[5]}>
         <ResourceKebab actions={menuActions} kind={kind} resource={route} />
