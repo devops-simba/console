@@ -46,6 +46,7 @@ import {
   serviceClassDisplayName,
   MachineKind,
   VolumeSnapshotKind,
+  routeRouter,
 } from '../../module/k8s';
 
 import {
@@ -141,6 +142,7 @@ const sorts = {
   podZone,
   podReadiness: (pod: PodKind): number => podReadiness(pod).readyCount,
   podRestarts,
+  routeRouter,
   pvStorage: (pv) => _.toInteger(convertToBaseValue(pv?.spec?.capacity?.storage)),
   pvcStorage: (pvc) => _.toInteger(convertToBaseValue(pvc?.status?.capacity?.storage)),
   serviceClassDisplayName,

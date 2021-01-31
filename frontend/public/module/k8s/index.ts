@@ -1,6 +1,7 @@
 export * from './job';
 export * from './k8s';
 export * from './pods';
+export * from './routes';
 export * from './resource';
 export * from './service-catalog';
 export * from './get-resources';

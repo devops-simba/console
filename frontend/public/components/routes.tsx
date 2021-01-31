@@ -186,6 +186,12 @@ const RouteTableHeader = () => {
       props: { className: tableColumnClasses[4] },
     },
     {
+      title: 'Router',
+      sortFunc: 'routeRouter',
+      transforms: [sortable],
+      props: {},
+    },
+    {
       title: '',
       props: { className: tableColumnClasses[5] },
     },
