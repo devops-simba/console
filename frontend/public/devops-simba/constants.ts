@@ -1,9 +1,9 @@
 import { Zone } from './types';
 
 export const availableZones: Zone[] = [
-  new Zone('afranet', 'Afranet', 'a', 'afra'),
-  new Zone('irancell', 'Irancell', 'i', 'ic'),
-  new Zone('asiatech', 'Asiatech', 's', 'asia', false),
+  new Zone('afranet', 'Afranet', 'afra'),
+  new Zone('asiatech', 'Asiatech', 'asia', false),
+  new Zone('irancell', 'Irancell', 'ic'),
 ];
 
 export const projectEnvironments = {

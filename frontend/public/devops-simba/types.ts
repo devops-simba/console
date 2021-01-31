@@ -2,7 +2,6 @@ export class Zone {
   constructor(
     public name: string,
     public displayName: string,
-    public indicator: string,
     public zoneIndicator: string,
     public enabled: boolean = true,
   ) {}

@@ -68,8 +68,11 @@ const CreateNamespaceModal = connect(
       const { name, displayName, selectedZones, description, env } = this.state;
 
       // @@https://jira.snapp.ir/browse/DEVT-419
-      const creationHint = env[0] + selectedZones.map((z) => z.indicator).join('');
-
+      const zones = selectedZones.map((z) => z.zoneIndicator);
+      const creationHint = `${description || ''}^^${JSON.stringify({
+        env: env.toLowerCase(),
+        zones,
+      })}`;
       const project = {
         metadata: {
           name,
@@ -78,7 +81,7 @@ const CreateNamespaceModal = connect(
           },
         },
         displayName,
-        description: `${description}-${creationHint}`,
+        description: creationHint,
       };
 
       if (selectedZones.length === 0) {
