@@ -1,4 +1,4 @@
-!/bin/sh
+#!/bin/sh
 
 SCRIPT_DIR=`realpath "$(dirname "$0")"`
 APP_DIR=`realpath "$SCRIPT_DIR/.."`
