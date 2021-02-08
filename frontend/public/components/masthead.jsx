@@ -5,6 +5,7 @@ import { Brand, PageHeader } from '@patternfly/react-core';
 import { MastheadToolbar } from './masthead-toolbar';
 import { history } from './utils';
 import okdLogoImg from '../imgs/okd-logo.svg';
+import simbaLogoImg from '../imgs/simba-logo.svg';
 import openshiftLogoImg from '../imgs/openshift-logo.svg';
 import ocpLogoImg from '../imgs/openshift-platform-logo.svg';
 import onlineLogoImg from '../imgs/openshift-online-logo.svg';
@@ -33,6 +34,10 @@ export const getBrandingDetails = () => {
     case 'azure':
       logoImg = openshiftLogoImg;
       productName = 'Azure Red Hat OpenShift';
+      break;
+    case 'simba':
+      logoImg = simbaLogoImg;
+      productName = 'Simba';
       break;
     default:
       logoImg = okdLogoImg;

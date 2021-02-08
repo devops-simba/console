@@ -1,5 +1,7 @@
 /fast-build
 /bin
+/debug-run.sh
+/.output
 /**/.cache-loader
 /**/node_modules
 

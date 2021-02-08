@@ -10,7 +10,7 @@ import { getActiveNamespace } from '../../actions/ui';
 import { ServiceModel, RouteModel } from '../../models';
 import { AsyncComponent } from '../utils/async';
 
-import { availableZones } from '../../devops-simba/constants'
+import { availableZones } from '../../devops-simba/constants';
 
 const UNNAMED_PORT_KEY = '#unnamed';
 const MAX_ALT_SERVICE_TARGET = 3;
@@ -99,10 +99,10 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
     });
   };
 
-  changeZone = (zone: string) => this.setState({zone});
+  changeZone = (zone: string) => this.setState({ zone });
   changeRouter = (router: string) => {
     this.setState({
-      router: router,
+      router,
     });
   };
 
@@ -193,6 +193,7 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
 
     let usingACME = false;
     let actualTermination = termination;
+    /* eslint-disable default-case */
     switch (termination) {
       case 'edgeUsingACME':
         usingACME = true;
@@ -216,25 +217,25 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
     const acmeAnnotationTag = 'kubernetes.io/tls-acme';
     const serviceName = _.get(service, 'metadata.name');
 
-    let labels = _.get(service, 'metadata.labels') || {};
+    const labels = _.get(service, 'metadata.labels') || {};
     const actualRouter = (router || 'public').toLowerCase();
-    if (actualRouter != 'public' && usingACME) {
+    if (actualRouter !== 'public' && usingACME) {
       this.setState({
         error: 'ACME encryption is only available for public routers',
       });
       return;
     }
 
-    labels['router'] = `${zone}-${actualRouter}`;
+    labels.router = `${zone}-${actualRouter}`;
 
     // let actualHostName = hostname;
     // if (!actualHostName || actualHostName.endsWith('ic.cloud.snapp.ir')) {
     //   actualHostName = name + '-' + namespace + '.apps.' + labels['router'] + '.ic.cloud.snapp.ir';
     // }
 
-    let annotations = {};
+    const annotations = {};
     if (usingACME) {
-      annotations[acmeAnnotationTag] = "true";
+      annotations[acmeAnnotationTag] = 'true';
     }
 
     // If the port is unnamed, there is only one port. Use the port number.
@@ -379,14 +380,16 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
       Redirect: 'Redirect',
     };
     const availableRouters = {
-      Internal: 'Internal',
+      //Internal: 'Internal',
       Admin: 'Admin',
       Public: 'Public',
     };
-    const zones = availableZones.filter((zone) => zone.enabled).reduce((res, zone) => {
-      res[zone.name] = zone.displayName;
-      return res;
-    }, {});
+    const zones = availableZones
+      .filter((zone) => zone.enabled)
+      .reduce((res, zone) => {
+        res[zone.name] = zone.displayName;
+        return res;
+      }, {});
     const alternateServicesList = _.map(alternateServices, (entryData, index) => {
       return (
         <div className="co-add-remove-form__entry" key={entryData.key}>
@@ -487,14 +490,16 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
               </div>
             </div>
             <div className="from-group co-create-route__zone">
-              <label className="co-required" htmlFor="zone">Zone</label>
+              <label className="co-required" htmlFor="zone">
+                Zone
+              </label>
               <Dropdown
                 items={zones}
                 dropDownClassName="dropdown--full-width"
                 id="zone"
                 onChange={this.changeZone}
                 describedBy="zone-help"
-                />
+              />
               <div className="help-block" id="zone-help">
                 <p>Zone that this router must defined in it</p>
               </div>
@@ -510,7 +515,7 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
                 id="router"
                 onChange={this.changeRouter}
                 describedBy="router-help"
-                />
+              />
               <div className="help-block" id="router-help">
                 <p>Router that will be used for this route</p>
               </div>
@@ -651,54 +656,57 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
                       <p>Policy for traffic on insecure schemes like HTTP.</p>
                     </div>
                   </div>
-                  {termination && termination !== 'passthrough' && termination !== 'edgeUsingACME' && termination !== 'reencryptUsingACME' && (
-                    <>
-                      <h2 className="h3">Certificates</h2>
-                      <div className="help-block">
-                        <p>
-                          TLS certificates for edge and re-encrypt termination. If not specified,
-                          the router&apos;s default certificate is used.
-                        </p>
-                      </div>
-                      <div className="form-group co-create-route__certificate">
-                        <DroppableFileInput
-                          onChange={this.onCertificateChange}
-                          inputFileData={this.state.certificate}
-                          id="certificate"
-                          label="Certificate"
-                          inputFieldHelpText="The PEM format certificate. Upload file by dragging &amp; dropping, selecting it, or pasting from the clipboard."
-                        />
-                      </div>
-                      <div className="form-group co-create-route__private-key">
-                        <DroppableFileInput
-                          onChange={this.onPrivateKeyChange}
-                          inputFileData={this.state.key}
-                          id="private-key"
-                          label="Private Key"
-                          inputFieldHelpText="The PEM format key. Upload file by dragging &amp; dropping, selecting it, or pasting from the clipboard."
-                        />
-                      </div>
-                      <div className="form-group co-create-route__caCertificate">
-                        <DroppableFileInput
-                          onChange={this.onCaCertificateChange}
-                          inputFileData={this.state.caCertificate}
-                          id="ca-certificate"
-                          label="CA Certificate"
-                          inputFieldHelpText="The PEM format CA certificate chain. Upload file by dragging &amp; dropping, selecting it, or pasting from the clipboard."
-                        />
-                      </div>
-                      {termination === 'reencrypt' && (
-                        <div className="form-group co-create-route__destinationCaCertificate">
+                  {termination &&
+                    termination !== 'passthrough' &&
+                    termination !== 'edgeUsingACME' &&
+                    termination !== 'reencryptUsingACME' && (
+                      <>
+                        <h2 className="h3">Certificates</h2>
+                        <div className="help-block">
+                          <p>
+                            TLS certificates for edge and re-encrypt termination. If not specified,
+                            the router&apos;s default certificate is used.
+                          </p>
+                        </div>
+                        <div className="form-group co-create-route__certificate">
                           <DroppableFileInput
-                            onChange={this.onDestinationCACertificateChange}
-                            inputFileData={this.state.destinationCACertificate}
-                            id="destination-ca-certificate"
-                            label="Destination CA Certificate"
+                            onChange={this.onCertificateChange}
+                            inputFileData={this.state.certificate}
+                            id="certificate"
+                            label="Certificate"
+                            inputFieldHelpText="The PEM format certificate. Upload file by dragging &amp; dropping, selecting it, or pasting from the clipboard."
                           />
                         </div>
-                      )}
-                    </>
-                  )}
+                        <div className="form-group co-create-route__private-key">
+                          <DroppableFileInput
+                            onChange={this.onPrivateKeyChange}
+                            inputFileData={this.state.key}
+                            id="private-key"
+                            label="Private Key"
+                            inputFieldHelpText="The PEM format key. Upload file by dragging &amp; dropping, selecting it, or pasting from the clipboard."
+                          />
+                        </div>
+                        <div className="form-group co-create-route__caCertificate">
+                          <DroppableFileInput
+                            onChange={this.onCaCertificateChange}
+                            inputFileData={this.state.caCertificate}
+                            id="ca-certificate"
+                            label="CA Certificate"
+                            inputFieldHelpText="The PEM format CA certificate chain. Upload file by dragging &amp; dropping, selecting it, or pasting from the clipboard."
+                          />
+                        </div>
+                        {termination === 'reencrypt' && (
+                          <div className="form-group co-create-route__destinationCaCertificate">
+                            <DroppableFileInput
+                              onChange={this.onDestinationCACertificateChange}
+                              inputFileData={this.state.destinationCACertificate}
+                              id="destination-ca-certificate"
+                              label="Destination CA Certificate"
+                            />
+                          </div>
+                        )}
+                      </>
+                    )}
                 </div>
               )}
               <ButtonBar errorMessage={this.state.error} inProgress={this.state.inProgress}>

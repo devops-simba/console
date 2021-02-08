@@ -3,6 +3,7 @@ export class Zone {
     public name: string,
     public displayName: string,
     public zoneIndicator: string,
+    public alternateIndicators: string[],
     public enabled: boolean = true,
   ) {}
 

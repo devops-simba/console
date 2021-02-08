@@ -4,5 +4,5 @@ set -e
 
 pushd frontend
 yarn install
-yarn run dev-once --verbose
+yarn run dev-once #--verbose
 popd

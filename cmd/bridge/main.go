@@ -6,6 +6,7 @@ import (
 	"crypto/x509"
 	"flag"
 	"fmt"
+	"path"
 	"runtime"
 
 	"io/ioutil"
@@ -110,7 +111,7 @@ func main() {
 	fK8sPublicEndpoint := fs.String("k8s-public-endpoint", "", "Endpoint to use when rendering kubeconfigs for clients. Useful for when bridge uses an internal endpoint clients can't access for communicating with the API server.")
 
 	fDexAPIHost := fs.String("dex-api-host", "", "Target host and port of the Dex API service.")
-	fBranding := fs.String("branding", "okd", "Console branding for the masthead logo and title. One of okd, openshift, ocp, online, dedicated, or azure. Defaults to okd.")
+	fBranding := fs.String("branding", "simba", "Console branding for the masthead logo and title. One of simba, okd, openshift, ocp, online, dedicated, or azure. Defaults to okd.")
 	fCustomProductName := fs.String("custom-product-name", "", "Custom product name for console branding.")
 	fCustomLogoFile := fs.String("custom-logo-file", "", "Custom product image for console branding.")
 	fStatuspageID := fs.String("statuspage-id", "", "Unique ID assigned by statuspage.io page that provides status info.")
@@ -192,9 +193,20 @@ func main() {
 
 	branding := *fBranding
 	if branding == "origin" {
-		branding = "okd"
+		branding = "simba"
 	}
 	switch branding {
+	case "simba":
+		branding = "okd"
+		if *fCustomProductName == "" {
+			*fCustomProductName = "Simba"
+		}
+		if *fCustomLogoFile == "" {
+			*fCustomLogoFile = path.Join(*fPublicDir, "assets/simba-logo.svg")
+			if _, err := os.Stat(*fCustomLogoFile); err != nil {
+				*fCustomLogoFile = ""
+			}
+		}
 	case "okd":
 	case "openshift":
 	case "ocp":

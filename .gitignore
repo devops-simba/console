@@ -7,6 +7,7 @@
 /fast-build/.output
 /fast-build/.yarn-cache
 /bin
+/.output
 /gopath
 /Godeps/_workspace/src/github.com/devops-simba/console
 /frontend/.cache-loader
