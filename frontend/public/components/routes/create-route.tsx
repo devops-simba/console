@@ -10,6 +10,8 @@ import { getActiveNamespace } from '../../actions/ui';
 import { ServiceModel, RouteModel } from '../../models';
 import { AsyncComponent } from '../utils/async';
 
+import { availableZones } from '../../devops-simba/constants'
+
 const UNNAMED_PORT_KEY = '#unnamed';
 const MAX_ALT_SERVICE_TARGET = 3;
 
@@ -47,6 +49,7 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
     hostname: '',
     path: '',
     service: null,
+    zone: availableZones[0].name,
     router: 'internal',
     weight: 100,
     targetPort: '',
@@ -96,6 +99,7 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
     });
   };
 
+  changeZone = (zone: string) => this.setState({zone});
   changeRouter = (router: string) => {
     this.setState({
       router: router,
@@ -172,6 +176,7 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
       hostname,
       path,
       service,
+      zone,
       router,
       weight,
       targetPort: selectedPort,
@@ -212,13 +217,15 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
     const serviceName = _.get(service, 'metadata.name');
 
     let labels = _.get(service, 'metadata.labels') || {};
-    labels['router'] = (router || 'internal').toLowerCase();
-    if (labels['router'] != 'public' && usingACME) {
+    const actualRouter = (router || 'public').toLowerCase();
+    if (actualRouter != 'public' && usingACME) {
       this.setState({
         error: 'ACME encryption is only available for public routers',
       });
       return;
     }
+
+    labels['router'] = `${zone}-${actualRouter}`;
 
     // let actualHostName = hostname;
     // if (!actualHostName || actualHostName.endsWith('ic.cloud.snapp.ir')) {
@@ -376,6 +383,10 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
       Admin: 'Admin',
       Public: 'Public',
     };
+    const zones = availableZones.filter((zone) => zone.enabled).reduce((res, zone) => {
+      res[zone.name] = zone.displayName;
+      return res;
+    }, {});
     const alternateServicesList = _.map(alternateServices, (entryData, index) => {
       return (
         <div className="co-add-remove-form__entry" key={entryData.key}>
@@ -473,6 +484,19 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
               />
               <div className="help-block" id="path-help">
                 <p>Path that the router watches to route traffic to the service.</p>
+              </div>
+            </div>
+            <div className="from-group co-create-route__zone">
+              <label className="co-required" htmlFor="zone">Zone</label>
+              <Dropdown
+                items={zones}
+                dropDownClassName="dropdown--full-width"
+                id="zone"
+                onChange={this.changeZone}
+                describedBy="zone-help"
+                />
+              <div className="help-block" id="zone-help">
+                <p>Zone that this router must defined in it</p>
               </div>
             </div>
             <div className="form-group co-create-route__router">
@@ -784,6 +808,7 @@ export type CreateRouteState = {
   hostname: string;
   path: string;
   service: K8sResourceKind;
+  zone: string;
   router: string;
   weight: number;
   targetPort: string;

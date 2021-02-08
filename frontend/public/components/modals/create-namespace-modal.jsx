@@ -69,7 +69,7 @@ const CreateNamespaceModal = connect(
 
       // @@https://jira.snapp.ir/browse/DEVT-419
       const zones = selectedZones.map((z) => z.zoneIndicator);
-      const creationHint = `${description || ''}^^${JSON.stringify({
+      const creationHint = `${description || ''} ^^${JSON.stringify({
         env: env.toLowerCase(),
         zones,
       })}`;
