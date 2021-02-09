@@ -1,12 +1,21 @@
-/**
+/*
 import * as React from 'react'
 import {  } from '../helma'
 
- * Show list of Helma objects in current project
-export const HelmaList: React.FC<{}> = (props) => {
-  return (
-    <>
-    </>
-  )
-}
- */
+export type HelmaEditorProps = {
+  //
+};
+
+export const HelmaEditor: React.FC<HelmaEditorProps> = (props) => {
+  return <>
+  </>
+};
+
+export type HelmaListProps = {
+};
+
+export const HelmaList: React.FC<HelmaListProps> = (props) => {
+  return <>
+  </>
+};
+*/

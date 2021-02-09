@@ -380,7 +380,7 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
       Redirect: 'Redirect',
     };
     const availableRouters = {
-      //Internal: 'Internal',
+      Internal: 'Internal',
       Admin: 'Admin',
       Public: 'Public',
     };
