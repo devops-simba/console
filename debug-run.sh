@@ -7,7 +7,6 @@ cp schema.graphql pkg/graphql
 ./bridge \
     --base-address="http://localhost:9000"                                  \
     --listen="http://0.0.0.0:9000"                                          \
-    --branding="simba"                                                      \
     --public-dir="./dist"                                                   \
     --k8s-auth="openshift"                                                  \
     --user-auth="openshift"                                                 \

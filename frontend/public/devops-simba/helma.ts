@@ -1,4 +1,5 @@
 //import { ObjectMetadata } from '../module/k8s/types'
+import { K8sResourceCommon } from '../module/k8s/types';
 
 export type HelmaClusterType = 'dns' | 'ip';
 export type HelmaClusterProtocol = 'http' | 'https' | 'default' | 'auto';
@@ -75,3 +76,17 @@ export type HelmaSpec = {
   firewall: HelmaFirewall[];
   rules: HelmaRule[];
 };
+
+export type HelmaStatus = {
+  domain: string;
+  domainUuid: string;
+  phase: string;
+  reviewedGeneration: number;
+  reviewedSpec: string;
+  tlsRetry: boolean;
+};
+
+export type HelmaResourceKind = {
+  spec?: HelmaSpec;
+  status?: HelmaStatus;
+} & K8sResourceCommon;
