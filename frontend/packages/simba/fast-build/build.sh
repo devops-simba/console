@@ -11,7 +11,7 @@ DEFAULT_REGISTRY='registry.apps.internal.ic.cloud.snapp.ir'
 DEFAULT_IMAGE_NAME="$DEFAULT_REGISTRY/openshift-console/openshift-console-modified"
 DEFAULT_OUTPUT="$SCRIPT_DIR/.output"
 
-IMAGE_TAG='4.8.18'
+IMAGE_TAG='4.8.19'
 IMAGE_NAME="$DEFAULT_IMAGE_NAME"
 BUILD_TYPE=
 BUILD_MODE=

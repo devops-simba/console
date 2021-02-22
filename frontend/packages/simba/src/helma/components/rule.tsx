@@ -81,7 +81,7 @@ type ruleEditorState = {
   customHeaders: KeyValuePair[];
   customVariableInCookie: KeyValuePair[];
   hostname?: string;
-  location?: string;
+  location: string;
   seq: number;
   browserCacheMaxAge?: HelmaCacheAge;
   serverCacheMaxAge?: HelmaCacheAge;
@@ -91,6 +91,7 @@ function emptyState(seq: number): Omit<ruleEditorState, keyof PromiseComponentSt
   return {
     seq,
     cluster: '',
+    location: '/',
     customHeaders: [],
     customVariableInCookie: [],
   };
@@ -135,6 +136,9 @@ export class RuleEditor extends PromiseComponent<RuleEditorProps, ruleEditorStat
   _validateInput() : Error {
     if (this.state.seq !== null && this.state.seq < 0) {
       return new Error('Invalid sequence number');
+    }
+    if (_.isEmpty(this.state.location)) {
+      return new Error('Please select a location');
     }
     if (_.isEmpty(this.state.cluster)) {
       return new Error('Please select a cluster');
@@ -237,7 +241,7 @@ export class RuleEditor extends PromiseComponent<RuleEditorProps, ruleEditorStat
             </div>
           </div>
           <div className="form-group">
-            <label htmlFor="input-location" className="conrol-label">Location</label>
+            <label htmlFor="input-location" className="co-required conrol-label">Location</label>
             <div className="modal-body__field">
               <input
                 id="input-location"

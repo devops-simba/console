@@ -61,7 +61,7 @@ export type HelmaRule = {
   customHeaders?: HelmaCustomHeader[];
   customVariableInCookie?: string;
   hostname?: string;
-  location?: string;
+  location: string;
   seq: number;
   browserCacheMaxAge?: HelmaCacheAge;
   serverCacheMaxAge?: HelmaCacheAge;
