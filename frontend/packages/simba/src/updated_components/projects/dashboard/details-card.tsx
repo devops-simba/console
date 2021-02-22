@@ -8,10 +8,11 @@ import DashboardCardTitle from '@console/shared/src/components/dashboard/dashboa
 import DetailsBody from '@console/shared/src/components/dashboard/details-card/DetailsBody';
 import DetailItem from '@console/shared/src/components/dashboard/details-card/DetailItem';
 import { getName, getRequester, GreenCheckCircleIcon } from '@console/shared';
-import { LabelList, resourcePathFromModel } from '../../utils';
-import { ProjectModel } from '../../../models';
-import { ProjectDashboardContext } from './project-dashboard-context';
-import { getZoneName } from '../../../devops-simba/utils';
+import { LabelList, resourcePathFromModel } from '@console/internal/components/utils';
+import { ProjectModel } from '@console/internal/models';
+import { ProjectDashboardContext } from '@console/internal/components/dashboard/project-dashboard/project-dashboard-context';
+
+import { getZoneName } from '../../../k8s/utils';
 
 export const DetailsCard: React.FC = () => {
   const { obj } = React.useContext(ProjectDashboardContext);

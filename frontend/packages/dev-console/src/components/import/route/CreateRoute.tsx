@@ -6,6 +6,8 @@ import { InputField, DropdownField } from '@console/shared';
 import { makePortName } from '../../../utils/imagestream-utils';
 import { AvailableRouters } from '../import-types';
 
+import { enabledZonesMapById } from "@console/internal/devops-simba/constants"
+
 const CreateRoute: React.FC = () => {
   const {
     values: {
@@ -56,6 +58,14 @@ const CreateRoute: React.FC = () => {
           fullWidth
         />
       )}
+      <DropdownField
+        name="route.zone"
+        label="Zone"
+        items={enabledZonesMapById}
+        title="Select a zone"
+        helpText="Zone that this router will be created in it."
+        fullWidth
+      />
       <DropdownField
         name="route.routerName"
         label="Router"

@@ -6,6 +6,22 @@ export const availableZones: Zone[] = [
   new Zone('irancell', 'Irancell', 'ic', []),
 ];
 
+export const enabledZones = availableZones.filter((z) => z.enabled);
+export const enabledZonesMapById = enabledZones.reduce(
+  (acc, {name, displayName}) => {
+    acc[name] = displayName;
+    return acc;
+  },
+  {}
+);
+export const enabledZonesMapByIndicator = enabledZones.reduce(
+  (acc, {zoneIndicator, displayName}) => {
+    acc[zoneIndicator] = displayName;
+    return acc;
+  },
+  {}
+);
+
 export const projectEnvironments = {
   test: 'Test',
   staging: 'Staging',

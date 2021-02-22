@@ -107,6 +107,18 @@
   padding: var(--pf-global--spacer--xl) var(--pf-global--spacer--xl) var(--pf-global--spacer--lg);
 }
 
+.name-label-header {
+  display: flex;
+}
+.name-label-header span {
+  flex: 2;
+  text-align: left;
+}
+.name-label-header a {
+  flex: 1;
+  text-align: right;
+}
+
 .modal__inline-resource-link {
   margin: 0;
 }

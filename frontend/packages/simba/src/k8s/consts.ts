@@ -1,9 +1,45 @@
-export type CountryInfo = {
-  id: number;
-  alpha2: string;
-  alpha3: string;
-  en: string;
-  fa: string;
+import { Zone, CountryInfo } from './models'
+
+export const availableZones: Zone[] = [
+  new Zone('afranet', 'Afranet', 'afra', ['afr']),
+  new Zone('asiatech', 'Asiatech', 'asia', [], false),
+  new Zone('irancell', 'Irancell', 'ic', []),
+];
+
+export const enabledZones = availableZones.filter((z) => z.enabled);
+export const enabledZonesMapById = enabledZones.reduce(
+  (acc, {name, displayName}) => {
+    acc[name] = displayName;
+    return acc;
+  },
+  {}
+);
+export const enabledZonesMapByIndicator = enabledZones.reduce(
+  (acc, {zoneIndicator, displayName}) => {
+    acc[zoneIndicator] = displayName;
+    return acc;
+  },
+  {}
+);
+
+export const projectEnvironments = {
+  test: 'Test',
+  staging: 'Staging',
+  production: 'Production',
+};
+
+export const knownAnnotations = {
+  openshiftNodeSelector: 'openshift.io/node-selector',
+};
+
+export const knownLabels = {
+  projectEnvironment: 'environment',
+};
+
+export const knownRouters = {
+  Internal: 'Internal',
+  Public: 'Public',
+  Admin: 'Admin'
 };
 
 export const countries: CountryInfo[] = [
@@ -240,32 +276,17 @@ export const countries: CountryInfo[] = [
   { id: 716, alpha2: 'zw', alpha3: 'zwe', fa: 'زیمبابوه', en: 'Zimbabwe' },
 ];
 
-export type CountryQuery = {
-  id?: number;
-  alpha2?: string;
-  alpha3?: string;
-  en?: string;
-  fa?: string;
-};
-export function findCountry(query: CountryQuery): CountryInfo {
-  if (
-    !query ||
-    (query.id === undefined &&
-      query.alpha2 === undefined &&
-      query.alpha3 === undefined &&
-      query.en === undefined &&
-      query.fa === undefined)
-  ) {
-    return undefined;
-  }
-
-  return countries.find(function(country) {
-    return (
-      (query.id === undefined || query.id === country.id) &&
-      (query.alpha2 === undefined || query.alpha2 === country.alpha2) &&
-      (query.alpha3 === undefined || query.alpha3 === country.alpha3) &&
-      (query.en === undefined || query.en === country.en) &&
-      (query.fa === undefined || query.fa === country.fa)
-    );
-  });
+export function createView(countries: CountryInfo[]) {
+  return countries.reduce(
+    (acc, {alpha2, en, fa}) => {
+      acc[alpha2] = `${en}/${fa}`;
+      return acc;
+    },
+    {}
+  )
 }
+
+export const countriesMap = createView(countries);
+export const fiterCountries = (text: string) => {
+  return createView(countries.filter((cty: CountryInfo) => cty.en.indexOf(text) != -1));
+};

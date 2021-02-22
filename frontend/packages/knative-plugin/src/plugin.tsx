@@ -320,6 +320,18 @@ const plugin: Plugin<ConsumedExtensions> = [
   {
     type: 'Page/Resource/List',
     properties: {
+      model: models.ServiceModel,
+      loader: async () =>
+        (
+          await import(
+            './components/services/ServicesPage' /* webpackChunkName: "knative-services-page" */
+          )
+        ).default,
+    },
+  },
+  {
+    type: 'Page/Resource/List',
+    properties: {
       model: models.RouteModel,
       loader: async () =>
         (

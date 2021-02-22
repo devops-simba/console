@@ -1,8 +1,9 @@
 //import { ObjectMetadata } from '../module/k8s/types'
-import { K8sResourceCommon } from '../module/k8s/types';
+import { K8sResourceCommon, K8sKind } from '@console/internal/module/k8s/types';
 
 export type HelmaClusterType = 'dns' | 'ip';
 export type HelmaClusterProtocol = 'http' | 'https' | 'default' | 'auto';
+//#region [HelmaCacheAge]
 export type HelmaCacheAge =
   | '0s'
   | '1s'
@@ -33,6 +34,7 @@ export type HelmaCacheAge =
   | '10d'
   | '15d'
   | '30d';
+//#endregion
 export type HelmaFirewallAction = 'allow' | 'deny';
 
 export type HelmaCustomHeader = {
@@ -41,7 +43,10 @@ export type HelmaCustomHeader = {
 };
 
 export type HelmaClusterServer = {
-  address: string;
+  address?: string;
+  zone?:string;
+  serviceName?: string;
+  servicePort?: string;
   port?: number;
   weight?: number;
 };
@@ -57,7 +62,7 @@ export type HelmaRule = {
   customVariableInCookie?: string;
   hostname?: string;
   location?: string;
-  seq?: number;
+  seq: number;
   browserCacheMaxAge?: HelmaCacheAge;
   serverCacheMaxAge?: HelmaCacheAge;
   serverCacheMaxAgeForNon200?: HelmaCacheAge;
@@ -86,7 +91,23 @@ export type HelmaStatus = {
   tlsRetry: boolean;
 };
 
-export type HelmaResourceKind = {
+export type HelmaKind = {
   spec?: HelmaSpec;
   status?: HelmaStatus;
 } & K8sResourceCommon;
+
+export const NoCRD_HelmaModel: K8sKind = {
+  id: 'cdn',
+  namespaced: true,
+  label: 'CDN',
+  labelPlural: 'CDNs and WAFs',
+  apiVersion: 'v1',
+  apiGroup: 'devops.snapp.ir',
+  plural: 'cdns',
+  abbr: 'cdn',
+  kind: 'CDN',
+};
+export const HelmaModel: K8sKind = Object.assign({}, NoCRD_HelmaModel, {
+  crd: true,
+  legacyPluralURL: true,
+});

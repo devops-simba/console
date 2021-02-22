@@ -1,0 +1,112 @@
+
+#!/bin/sh
+
+PLUGIN_FOLDER=`realpath "$(dirname "$0")"`
+VERBOSITY=0
+ACTION=
+PARAMS=
+
+red="\033[31m"
+orange="\033[0;33m"
+lightGray="\033[0;37m"
+nc="\033[0m"
+
+usage() {
+  echo "Usage: $0 <options>"
+  echo "options:"
+  echo "  [-h, --help]"
+  echo "    Show this help window"
+  echo "  [-b, --backup] </path/to/backup/location>"
+  echo "    Backup this plugin to specified plugin"
+  echo "  [-u, --uninstall]"
+  echo "    Uninstall this plugin from current repository"
+  echo "  [-i, --install] </path/to/console/repository>"
+  echo "    Install this plugin to specified repository."
+  echo "    Path must be to the root of the repository of the console"
+  echo "  [-v, --verbose]       <verbosity>"
+  echo "    Set verbosity of this script"
+
+  if [ -z "$1" ]; then
+    exit 0
+  else
+    exit $1
+  fi
+}
+log() {
+  level="$1"
+  message="$2"
+  if [ $VERBOSITY -ge $level ]; then
+    echo "$message"
+  fi
+}
+add_param() {
+  PARAMS="${PARAMS}$1\n"
+}
+read_param() {
+  PARAM=`echo "$PARAMS" | head -n1`
+  PARAMS=`echo "$PARAMS" | sed 1d`
+}
+set_action() {
+  ACTION="${ACTION}$1 "
+}
+
+PARSED_ARGS=`getopt -n "$0" -o 'hb:ui:v:' --long 'help,backup:,uninstall,install:,verbosity:' -- $@`
+
+while :
+do
+  case "$1" in
+    -h|--help)      usage ;;
+    -b|--backup)    add_param "`realpath "$2"`"; set_action 'backup';    shift 2 ;;
+    -u|--uninstall) add_param "";                set_action 'uninstall'; shift   ;;
+    -i|--install)   add_param "`realpath "$2"`"; set_action 'install';   shift 2 ;;
+    *) break ;;
+  esac
+done
+
+backup() {
+  LOCATION="$1"
+  BACKUP_LOCATION="$LOCATION/`basename $PLUGIN_FOLDER`"
+  if [ -d "$BACKUP_LOCATION" ]; then rm -rf "$BACKUP_LOCATION"; fi
+  cp -R "$PLUGIN_FOLDER" "$LOCATION"
+}
+uninstall() {
+  REPO_LOCATION=`realpath "$PLUGIN_FOLDER/../../.."`;
+  CONSOLE_APP_PACKAGE_PATH="$REPO_LOCATION/frontend/packages/console-app/package.json"
+
+  COMMAND="import json\n"
+  COMMAND="${COMMAND}with open('$CONSOLE_APP_PACKAGE_PATH') as f: o=json.load(f)\n"
+  COMMAND="${COMMAND}if '@console/simba' in o['dependencies']:\n"
+  COMMAND="${COMMAND}  del o['dependencies']['@console/simba']\n"
+  COMMAND="${COMMAND}  with open('$CONSOLE_APP_PACKAGE_PATH', 'w') as f: json.dump(o, f, indent=2)"
+  echo "$COMMAND" | python3 -
+
+  if [ -d "$REPO_LOCATION/frontend/packages/simba" ]; then
+    # uninstall old version
+    rm -rf "$REPO_LOCATION/frontend/packages/simba"
+  fi
+}
+install() {
+  REPO_LOCATION="$1"
+  if [ -d "$REPO_LOCATION/frontend/packages/simba" ]; then
+    # uninstall old version
+    uninstall
+  fi
+  cp -R "$PLUGIN_FOLDER" "$REPO_LOCATION/frontend/packages"
+  CONSOLE_APP_PACKAGE_PATH="$REPO_LOCATION/frontend/packages/console-app/package.json"
+
+  COMMAND="import json\n"
+  COMMAND="${COMMAND}with open('$CONSOLE_APP_PACKAGE_PATH') as f: o=json.load(f)\n"
+  COMMAND="${COMMAND}o['dependencies']['@console/simba']='0.0.0-fixed'\n"
+  COMMAND="${COMMAND}with open('$CONSOLE_APP_PACKAGE_PATH', 'w') as f: json.dump(o, f, indent=2)"
+  echo "$COMMAND" | python3 -
+}
+
+for action in $ACTION
+do
+  read_param
+  case "$action" in
+    backup)     backup    "$PARAM" ;;
+    uninstall)  uninstall "$PARAM" ;;
+    install)    install   "$PARAM" ;;
+  esac
+done

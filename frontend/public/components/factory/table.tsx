@@ -27,7 +27,7 @@ import {
   silenceStateOrder,
 } from '../../reducers/monitoring';
 import { ingressValidHosts } from '../ingress';
-import { convertToBaseValue, EmptyBox, StatusBox, WithScrollContainer } from '../utils';
+import { convertToBaseValue, EmptyBox, StatusBox, WithScrollContainer, } from '../utils';
 import {
   getClusterOperatorStatus,
   getClusterOperatorVersion,
@@ -48,6 +48,7 @@ import {
   VolumeSnapshotKind,
   routeRouter,
 } from '../../module/k8s';
+import { getZoneName } from '../../devops-simba/utils'
 
 import {
   IRowData, // eslint-disable-line no-unused-vars
@@ -136,6 +137,7 @@ const sorts = {
   planExternalName,
   namespaceCPU: (ns: K8sResourceKind): number => UIActions.getNamespaceMetric(ns, 'cpu'),
   namespaceMemory: (ns: K8sResourceKind): number => UIActions.getNamespaceMetric(ns, 'memory'),
+  namespaceZone: (ns: K8sResourceKind): string => getZoneName(ns),
   podCPU: (pod: PodKind): number => UIActions.getPodMetric(pod, 'cpu'),
   podMemory: (pod: PodKind): number => UIActions.getPodMetric(pod, 'memory'),
   podPhase,
@@ -523,6 +525,7 @@ export const Table = connect<
 
     constructor(props) {
       super(props);
+      /* eslint-disable no-console */
       const componentProps: ComponentProps = _.pick(props, [
         'data',
         'filters',

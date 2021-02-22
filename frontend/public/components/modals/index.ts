@@ -33,7 +33,10 @@ export const createProjectModal = (props) =>
   import('./create-namespace-modal' /* webpackChunkName: "create-namespace-modal" */).then((m) =>
     m.createProjectModal(props),
   );
-
+export const editProjectModal = (props) =>
+  import('./edit-namespace-modal' /* webpackChunkName: "edit-namespace-modal" */).then((m) =>
+    m.editProjectModal(props),
+  )
 export const deleteNamespaceModal = (props) =>
   import('./delete-namespace-modal' /* webpackChunkName: "delete-namespace-modal" */).then((m) =>
     m.deleteNamespaceModal(props),

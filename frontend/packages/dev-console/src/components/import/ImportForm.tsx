@@ -154,6 +154,7 @@ const ImportForm: React.FC<ImportFormProps & StateProps> = ({
     const {
       project: { name: projectName },
       route: {
+        zone,
         routerName,
         tls: { termination },
       },
@@ -161,6 +162,13 @@ const ImportForm: React.FC<ImportFormProps & StateProps> = ({
 
     let appResources: AppResources = null;
     if (termination === 'edgeUsingACME' || termination === 'reencryptUsingACME') {
+      if (routerName !== 'public') {
+        actions.setSubmitting(false);
+        actions.setState({
+          submitError: 'ACME encryption is only available for public routers',
+        });
+        return;
+      }
       appResources = {
         editAppResource: {
           loaded: true,
@@ -179,7 +187,7 @@ const ImportForm: React.FC<ImportFormProps & StateProps> = ({
       };
       values.route.tls.termination = termination === 'edgeUsingACME' ? 'edge' : 'reencrypt';
     }
-    values.labels.router = routerName;
+    values.labels.router = `${zone}-${routerName}`;
     const resourceActions = createOrUpdateResources(
       values,
       imageStream,

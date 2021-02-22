@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
@@ -8,7 +9,7 @@ import { NamespaceModel, ProjectRequestModel, NetworkPolicyModel } from '../../m
 import { createModalLauncher, ModalTitle, ModalBody, ModalSubmitFooter } from '../factory/modal';
 import { Dropdown, history, PromiseComponent, resourceObjPath, SelectorInput } from '../utils';
 import { setFlag } from '../../actions/features';
-import { availableZones, projectEnvironments, knownLabels } from '../../devops-simba/constants';
+import { enabledZones, projectEnvironments, knownLabels } from '../../devops-simba/constants';
 import { updateNodeSelector } from '../../devops-simba/utils';
 import { CheckboxGroup } from '../../devops-simba/components/checkbox-group';
 
@@ -38,7 +39,7 @@ const CreateNamespaceModal = connect(
       this.handleChange = this.handleChange.bind(this);
       this.onLabels = this.onLabels.bind(this);
       if (this.props.createProject) {
-        this.state.availableZones = [...availableZones.filter((z) => z.enabled)];
+        this.state.availableZones = [...enabledZones];
         this.state.selectedZones = [...this.state.availableZones];
         this.state.env = 'test';
       }
@@ -68,6 +69,13 @@ const CreateNamespaceModal = connect(
       const { name, displayName, selectedZones, description, env } = this.state;
 
       // @@https://jira.snapp.ir/browse/DEVT-419
+      if (_.isEmpty(selectedZones)) {
+        throw Error('You must at least select one zone');
+      }
+      if (_.isEmpty(env)) {
+        throw Error('You must an environment');
+      }
+
       const zones = selectedZones.map((z) => z.zoneIndicator);
       const creationHint = `${description || ''} ^^${JSON.stringify({
         env: env.toLowerCase(),
@@ -83,13 +91,6 @@ const CreateNamespaceModal = connect(
         displayName,
         description: creationHint,
       };
-
-      if (selectedZones.length === 0) {
-        this.setState({
-          error: 'You must at least select one zone',
-        });
-        return null;
-      }
 
       updateNodeSelector(project, selectedZones);
 

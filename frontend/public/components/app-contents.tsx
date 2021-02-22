@@ -134,6 +134,11 @@ const AppContents_: React.FC<AppContentsProps> = ({ activePerspective }) => {
             <Redirect from="/overview/ns/:ns" to="/k8s/cluster/projects/:ns/workloads" />
             <Route path="/overview" exact component={NamespaceRedirect} />
 
+            {
+              ////#region [DevOpsSimba routes]
+              ////#endregion
+            }
+
             <LazyRoute
               path="/api-explorer"
               exact

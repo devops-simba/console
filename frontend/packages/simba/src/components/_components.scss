@@ -1,0 +1,182 @@
+.key-value-editor {
+  min-width: 100%;
+}
+
+.key-value-editor:focus,
+.key-value-editor .host:focus {
+  outline: none;
+}
+
+.key-value-editor .host {
+  margin-bottom: 5px;
+  margin-top: 5px;
+  position: relative;
+}
+.key-value-editor .host:active {
+  outline: none;
+}
+
+.key-value-editor .tags {
+  background-image: none; // Reset unusual Firefox-on-Android default style; see https://github.com/necolas/normalize.css/issues/214
+  border-radius: 1px; // Note: This has no effect on <select>s in some browsers, due to the limited stylability of <select>s in CSS.
+  color: #363636;
+  cursor: text;
+  line-height: 20px;
+}
+
+.modal-body .key-value-editor .tags {
+  background-color: rgba(255, 255, 255, 0.5); // enable scroll-shadows to be seen
+  margin-bottom: 15px;
+  min-height: 60px;
+
+  .tag-item {
+    background-color: rgba(235,235,235,.5); // enable scroll-shadows to be seen
+  }
+}
+
+.key-value-editor .tags.focused,
+.key-value-editor .tags:focus {
+  border-color: #66AFE9;
+  outline: none;
+}
+
+.key-value-editor .tags .tag-item {
+  background-color: #f5f5f5;
+  border: 1px solid #ededed;
+  border-radius: 12px;
+  display: inline-flex;
+  line-height: 20px;
+  margin: 0 2px 2px 0;
+  max-width: 100%;
+  padding: 0 8px;
+
+  word-break: break-all; // required for Firefox, Edge
+
+  &__key, &__value {
+    max-width: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.key-value-editor .tags .tag-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.key-value-editor .tags .tag-item.selected {
+  border: solid 1px;
+}
+
+.key-value-editor .tags .tag-item .remove-button {
+  border: none;
+  background: none;
+  color: #585858;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 0 0 2px;
+  padding: 0;
+  vertical-align: middle;
+}
+
+.key-value-editor .tags .tag-item .remove-button:active {
+  color: #fff;
+}
+
+.key-value-editor .remove-button:active,
+.key-value-editor .remove-button:hover {
+  text-decoration: none;
+}
+
+.key-value-editor .tags .input {
+  background: transparent;
+  border: 1px solid transparent;
+  line-height: 20px;
+  outline: none;
+  padding: 0;
+  // Since iOS phone text input size is larger, remove border and margin and increase line-height
+  @supports (-webkit-overflow-scrolling: touch) { // Target mobile Safari
+    @media (max-width: 767px) { // Target phones
+      border: 0;
+      line-height: 24px;
+      margin-bottom: 0;
+      margin-top: 0;
+    }
+  }
+}
+
+.key-value-editor .tags .input.invalid-tag {
+  color: #a30000;
+}
+
+.key-value-editor .tags .input::-ms-clear {
+  display: none;
+}
+
+.key-value-editor.ng-invalid .tags {
+  border-color: #a30000;
+}
+
+.key-value-editor .autocomplete {
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  margin-top: 5px;
+  position: absolute;
+  padding: 5px 0;
+  width: 100%;
+  z-index: 999;
+}
+
+.key-value-editor .autocomplete .suggestion-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.key-value-editor .autocomplete .suggestion-item {
+  background-color: white;
+  color: black;
+  cursor: pointer;
+  font: 16px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  overflow: hidden;
+  padding: 5px 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.key-value-editor .autocomplete .suggestion-item.selected {
+  background-color: #0097cf;
+  color: white;
+}
+
+.key-value-editor .autocomplete .suggestion-item.selected em {
+  background-color: #0097cf;
+  color: white;
+}
+
+.key-value-editor .autocomplete .suggestion-item em {
+  background-color: white;
+  color: black;
+  font: normal bold 16px "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.key-value-editor .new-tag {
+  min-width: 100%;
+  display: inline-flex;
+}
+.key-value-editor .new-tag input {
+  margin-right: 3px;
+  padding-left: 6px;
+  border-radius: 12px;
+  border:1px solid #c8c8c8;
+  flex: 5;
+}
+.key-value-editor .new-tag input:focus,
+.key-value-editor .new-tag input:active,
+.key-value-editor .new-tag input:hover {
+  border: 1px solid #0097cf;
+  outline: 0;
+}

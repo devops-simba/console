@@ -1,0 +1,23 @@
+{
+  "name": "@console/simba",
+  "version": "0.0.0-fixed",
+  "description": "Simba extensions to openshift console",
+  "private": "true",
+  "main": "src/index.ts",
+  "scripts": {
+    "lint": "yarn --cwd ../.. eslint packages/simba"
+  },
+  "dependencies": {
+    "@console/internal": "0.0.0-fixed",
+    "@console/plugin-sdk": "0.0.0-fixed",
+    "@console/shared": "0.0.0-fixed"
+  },
+  "consolePlugin": {
+    "entry": "src/plugin.tsx",
+    "integrationTestSuites": {
+      "simbaplugin": [
+        "integration-tests/**/*.scenario.ts"
+      ]
+    }
+  }
+}

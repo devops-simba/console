@@ -1,16 +1,17 @@
-import * as _ from 'lodash-es';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import * as _ from 'lodash';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { Alert, ActionGroup, Button } from '@patternfly/react-core';
 import { PlusCircleIcon, MinusCircleIcon } from '@patternfly/react-icons';
 
-import { ButtonBar, Dropdown, history, resourcePathFromModel, ResourceName } from '../utils';
-import { k8sCreate, k8sList, K8sResourceKind } from '../../module/k8s';
-import { getActiveNamespace } from '../../actions/ui';
-import { ServiceModel, RouteModel } from '../../models';
-import { AsyncComponent } from '../utils/async';
+import { ButtonBar, Dropdown, history, resourcePathFromModel, ResourceName } from '@console/internal/components/utils';
+import { k8sCreate, k8sList, K8sResourceKind } from '@console/internal/module/k8s';
+import { getActiveNamespace } from '@console/internal/actions/ui';
+import { ServiceModel, RouteModel } from '@console/internal/models';
+import { AsyncComponent } from '@console/internal/components/utils';
 
-import { enabledZonesMapById, availableZones } from '../../devops-simba/constants';
+import { availableZones } from '../../k8s/consts';
 
 const UNNAMED_PORT_KEY = '#unnamed';
 const MAX_ALT_SERVICE_TARGET = 3;
@@ -38,7 +39,7 @@ const getPortOptions = (service: K8sResourceKind) => {
 
 const DroppableFileInput = (props) => (
   <AsyncComponent
-    loader={() => import('../utils/file-input').then((c) => c.DroppableFileInput)}
+    loader={() => import('@console/internal/components/utils/file-input').then((c) => c.DroppableFileInput)}
     {...props}
   />
 );
@@ -49,7 +50,7 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
     hostname: '',
     path: '',
     service: null,
-    zone: availableZones.find((z) => z.enabled).name,
+    zone: availableZones[0].name,
     router: 'internal',
     weight: 100,
     targetPort: '',
@@ -65,7 +66,6 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
     error: '',
     namespace: getActiveNamespace(),
     services: [],
-    labels: {},
     portOptions: {},
     alternateServices: [],
   };
@@ -384,6 +384,12 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
       Admin: 'Admin',
       Public: 'Public',
     };
+    const zones = availableZones
+      .filter((zone) => zone.enabled)
+      .reduce((res, zone) => {
+        res[zone.name] = zone.displayName;
+        return res;
+      }, {});
     const alternateServicesList = _.map(alternateServices, (entryData, index) => {
       return (
         <div className="co-add-remove-form__entry" key={entryData.key}>
@@ -488,7 +494,7 @@ export class CreateRoute extends React.Component<{}, CreateRouteState> {
                 Zone
               </label>
               <Dropdown
-                items={enabledZonesMapById}
+                items={zones}
                 dropDownClassName="dropdown--full-width"
                 id="zone"
                 onChange={this.changeZone}
@@ -759,7 +765,7 @@ export const AlternateServicesGroup: React.FC<AlternateServiceEntryGroupProps> =
           dropDownClassName="dropdown--full-width"
           id={`${index}-alt-service`}
           onChange={onServiceChange}
-          describedby={`${index}-alt-service-help`}
+          describedBy={`${index}-alt-service-help`}
         />
         <div className="help-block" id={`${index}-alt-service-help`}>
           <p>Alternate service to route to.</p>
@@ -826,7 +832,6 @@ export type CreateRouteState = {
   error: string;
   namespace: string;
   services: K8sResourceKind[];
-  labels: object;
   portOptions: any;
   alternateServices: AlternateServiceEntryType[];
 };

@@ -32,6 +32,8 @@ export const ResourceListPage = connectToPlural(
   withStartGuide((props: ResourceListPageProps) => {
     const resourceListPageExtensions = useExtensions<ResourceListPageExt>(isResourceListPage);
     const { kindObj, kindsInFlight, modelRef, noProjectsAvailable, ns, plural } = allParams(props);
+    /* eslint-disable no-console */
+    console.log("RESOURCE_LIST_PAGE", kindObj, kindsInFlight, modelRef, noProjectsAvailable, ns, plural);
 
     if (!kindObj) {
       if (kindsInFlight) {

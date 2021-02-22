@@ -55,6 +55,7 @@ import {
 import {
   createNamespaceModal,
   createProjectModal,
+  editProjectModal,
   deleteNamespaceModal,
   configureNamespacePullSecretModal,
 } from './modals';
@@ -69,6 +70,8 @@ import {
   ProjectDashboard,
 } from './dashboard/project-dashboard/project-dashboard';
 import { removeQueryArgument } from './utils/router';
+
+import { getZoneName } from '../devops-simba/utils'
 
 const getModel = (useProjects) => (useProjects ? ProjectModel : NamespaceModel);
 const getDisplayName = (obj) =>
@@ -98,11 +101,30 @@ export const deleteModal = (kind, ns) => {
   }
   return { label, weight, callback, accessReview };
 };
+export const editModal = (kind, ns) => {
+  let { label, weight, callback, accessReview } = Kebab.factory.Edit(kind, ns);
+  let tooltip;
+
+  if (ns.status.phase === 'Terminating') {
+    tooltip = `${kind.label} is terminating`;
+    callback = undefined;
+  } else {
+    callback = () => editProjectModal({kind, resource: ns});
+  }
+  if (tooltip) {
+    label = <div className="dropdown__disabled">
+      <Tooltip content={tooltip}>
+        <span>{label}</span>
+      </Tooltip>
+    </div>
+  }
+  return {label, weight, callback, accessReview};
+};
 
 const nsMenuActions = [
   Kebab.factory.ModifyLabels,
   Kebab.factory.ModifyAnnotations,
-  Kebab.factory.Edit,
+  editModal,
   deleteModal,
 ];
 
@@ -144,6 +166,11 @@ const namespaceColumnInfo = Object.freeze({
     classes: '',
     id: 'status',
     title: 'Status',
+  },
+  zones: {
+    classes: '',
+    id: 'zones',
+    title: 'Zones',
   },
   requester: {
     classes: classNames('pf-m-hidden', 'pf-m-visible-on-lg'),
@@ -199,6 +226,13 @@ const NamespacesTableHeader = () => {
       sortField: 'status.phase',
       transforms: [sortable],
       props: { className: namespaceColumnInfo.status.classes },
+    },
+    {
+      title: namespaceColumnInfo.zones.title,
+      id: namespaceColumnInfo.zones.id,
+      sortFunc: 'namespaceZone',
+      transforms: [sortable],
+      props: { className: namespaceColumnInfo.zones.classes },
     },
     {
       title: namespaceColumnInfo.requester.title,
@@ -298,6 +332,13 @@ const NamespacesTableRow = connect(namespacesRowStateToProps)(
           columnID={namespaceColumnInfo.status.id}
         >
           <Status status={ns.status.phase} />
+        </TableData>
+        <TableData
+          className={classNames(namespaceColumnInfo.zones.classes, 'co-break-word')}
+          columns={columns}
+          columnID={namespaceColumnInfo.zones.id}
+        >
+          <Status status={getZoneName(ns)} />
         </TableData>
         <TableData
           className={classNames(namespaceColumnInfo.requester.classes, 'co-break-word')}
@@ -412,7 +453,7 @@ export const NamespacesPage = (props) => {
   );
 };
 
-export const projectMenuActions = [Kebab.factory.Edit, deleteModal];
+export const projectMenuActions = [editModal, deleteModal];
 
 const projectColumnManagementID = referenceForModel(ProjectModel);
 
@@ -822,6 +863,7 @@ const ResourceUsage = requirePrometheus(({ ns }) => (
 export const NamespaceSummary = ({ ns }) => {
   const displayName = getDisplayName(ns);
   const requester = getRequester(ns);
+  const zone = getZoneName(ns);
   const serviceMeshEnabled = ns.metadata?.labels?.['maistra.io/member-of'];
   const canListSecrets = useAccessReview({
     group: SecretModel.apiGroup,
@@ -838,6 +880,8 @@ export const NamespaceSummary = ({ ns }) => {
           {displayName && <dd>{displayName}</dd>}
           {requester && <dt>Requester</dt>}
           {requester && <dd>{requester}</dd>}
+          {zone && <dt>Zones</dt>}
+          {zone && <dd>{zone}</dd>}
         </ResourceSummary>
       </div>
       <div className="col-sm-6 col-xs-12">

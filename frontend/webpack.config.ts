@@ -21,7 +21,7 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 const HOT_RELOAD = process.env.HOT_RELOAD || 'true';
 const CHECK_CYCLES = process.env.CHECK_CYCLES || 'false';
 const IS_WDS = process.env.WEBPACK_DEV_SERVER;
-const WDS_PORT = 8080;
+const WDS_PORT = 9000;
 
 /* Helpers */
 const extractCSS = new MiniCssExtractPlugin({ filename: 'app-bundle.[contenthash].css' });
@@ -203,7 +203,6 @@ const config: Configuration = {
   stats: 'minimal',
 };
 
-console.error('output path: ' + config.output.path)
 if (CHECK_CYCLES === 'true') {
   new CircularDependencyPreset({
     exclude: /node_modules|public\/dist/,
