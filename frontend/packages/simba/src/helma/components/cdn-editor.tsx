@@ -169,11 +169,11 @@ export class CDNEditor extends React.Component<{}, cdnEditorState> {
         namespace,
       },
       spec: {
-        domain,
         clusters,
       },
     };
     if (!_.isEmpty(firewalls)) { obj.spec.firewalls = firewalls }
+    if (!_.isEmpty(domain)) { obj.spec.domain = domain }
     if (!_.isEmpty(rules)) {
       obj.spec.rules = [];
       _.each(
