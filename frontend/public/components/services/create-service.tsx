@@ -112,6 +112,7 @@ export class CreateService extends React.Component<{}, CreateServiceState> {
       const updatedPorts = [...ports];
       const updatedPort: ServicePort = {
         key: updatedPorts[index].key,
+        name: updatedPorts[index].name,
         protocol: updatedPorts[index].protocol,
         port: updatedPorts[index].port,
         targetPort: updatedPorts[index].targetPort,
