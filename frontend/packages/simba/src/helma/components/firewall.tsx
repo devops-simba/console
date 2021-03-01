@@ -111,7 +111,7 @@ export class HelmaFirewallEditor extends PromiseComponent<FirewallEditorProps, f
     if (!_.isEmpty(sourceIps)) {
       firewall.sources.push(...sourceIps);
     }
-    firewall.sources.push(...sourceCountries);
+    firewall.sources.push(...sourceCountries.map(sc => sc.toUpperCase()));
     if (!_.isEmpty(note)) {
       firewall.note = note;
     }
