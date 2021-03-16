@@ -116,6 +116,12 @@ const ImportForm: React.FC<ImportFormProps & StateProps> = ({
       },
       strategy: importData.buildStrategy || 'Source',
     },
+    logConfig: {
+      enabled: false,
+      users: [],
+      logName: '',
+      ilm: 0,
+    },
     deployment: {
       env: [],
       triggers: {

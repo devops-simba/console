@@ -7,6 +7,7 @@ import {
   serverlessValidationSchema,
   limitsValidationSchema,
   routeValidationSchema,
+  logConfigValidationSchema,
   isiValidationSchema,
   resourcesValidationSchema,
 } from './validation-schema';
@@ -20,6 +21,7 @@ export const deployValidationSchema = yup.object().shape({
   serverless: serverlessValidationSchema,
   deployment: deploymentValidationSchema,
   route: routeValidationSchema,
+  logConfig: logConfigValidationSchema,
   limits: limitsValidationSchema,
   resources: resourcesValidationSchema,
   healthChecks: healthChecksProbesValidationSchema,

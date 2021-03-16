@@ -50,6 +50,9 @@ export const mockFormData: GitImportFormData = {
       privateKey: '',
     },
   },
+  logConfig: {
+    enabled: false,
+  },
   build: {
     env: [],
     triggers: {

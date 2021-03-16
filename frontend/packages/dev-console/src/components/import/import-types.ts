@@ -79,9 +79,11 @@ export interface DeployImageFormData {
   serverless?: ServerlessData;
   pipeline?: PipelineData;
   labels: { [name: string]: string };
+  //annotations: { [name: string]: string };
   env?: { [name: string]: string };
   route: RouteData;
   build: BuildData;
+  logConfig?: LogConfigurationData;
   deployment: DeploymentData;
   limits: LimitsData;
   healthChecks: HealthChecksData;
@@ -102,8 +104,10 @@ export interface GitImportFormData {
   resources: Resources;
   resourceTypesNotValid?: Resources[];
   build: BuildData;
+  logConfig?: LogConfigurationData;
   deployment: DeploymentData;
   labels: { [name: string]: string };
+  //annotations: { [name: string]: string };
   limits: LimitsData;
   healthChecks: HealthChecksData;
 }
@@ -148,6 +152,13 @@ export interface GitData {
   secret: string;
   isUrlValidating: boolean;
 }
+
+export interface LogConfigurationData {
+  enabled?: boolean;
+  users?: string[];
+  logName?: string;
+  ilm?: number;
+};
 
 export interface DockerData {
   dockerfilePath?: string;

@@ -35,6 +35,7 @@ import {
 } from './import-types';
 import { createPipelineForImportFlow } from './pipeline/pipeline-template-utils';
 import { Perspective } from '@console/plugin-sdk';
+import { getLogConfigAnnotations } from './log-config-utils'
 
 export const generateSecret = () => {
   // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
@@ -241,6 +242,7 @@ export const createOrUpdateDeployment = (
       triggers: { image: imageChange },
     },
     labels: userLabels,
+    logConfig,
     limits: { cpu, memory },
     git: { url: repository, ref },
     healthChecks,
@@ -275,6 +277,7 @@ export const createOrUpdateDeployment = (
       template: {
         metadata: {
           labels: { ...userLabels, ...podLabels },
+          annotations: getLogConfigAnnotations(logConfig),
         },
         spec: {
           containers: [
@@ -306,6 +309,12 @@ export const createOrUpdateDeployment = (
   };
   const deployment = mergeData(originalDeployment, newDeployment);
 
+  /* eslint-disable: no-console */
+  console.info(`DBG.createOrUpdateDeployment@import-submit-utils() => ${JSON.stringify({
+    verb,
+    deployment,
+  })}`);
+
   return verb === 'update'
     ? k8sUpdate(DeploymentModel, deployment)
     : k8sCreate(DeploymentModel, deployment, dryRun ? dryRunOpt : {});
@@ -325,6 +334,7 @@ export const createOrUpdateDeploymentConfig = (
     image: { ports, tag: selectedTag },
     deployment: { env, replicas, triggers },
     labels: userLabels,
+    logConfig,
     limits: { cpu, memory },
     git: { url: repository, ref },
     healthChecks,
@@ -350,6 +360,7 @@ export const createOrUpdateDeploymentConfig = (
       template: {
         metadata: {
           labels: { ...userLabels, ...podLabels },
+          annotations: getLogConfigAnnotations(logConfig),
         },
         spec: {
           containers: [
@@ -394,6 +405,11 @@ export const createOrUpdateDeploymentConfig = (
     },
   };
   const deploymentConfig = mergeData(originalDeploymentConfig, newDeploymentConfig);
+  /* eslint-disable: no-console */
+  console.info(`DBG.createOrUpdateDeploymentConfig@import-submit-utils() => ${JSON.stringify({
+    verb,
+    deploymentConfig,
+  })}`);
 
   return verb === 'update'
     ? k8sUpdate(DeploymentConfigModel, deploymentConfig)

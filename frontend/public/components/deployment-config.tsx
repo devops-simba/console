@@ -35,6 +35,7 @@ import {
 import { ReplicationControllersPage } from './replication-controller';
 
 import { WorkloadTableRow, WorkloadTableHeader } from './workload-table';
+import { LogConfigAction } from './log-config-actions';
 
 const DeploymentConfigsReference: K8sResourceKindReference = 'DeploymentConfig';
 
@@ -86,6 +87,7 @@ const PauseAction: KebabAction = (kind: K8sKind, obj: K8sResourceKind) => ({
 const { ModifyCount, AddStorage, common } = Kebab.factory;
 
 export const menuActions: KebabAction[] = [
+  LogConfigAction,
   RolloutAction,
   PauseAction,
   hideActionForHPAs(ModifyCount),

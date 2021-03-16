@@ -22,9 +22,11 @@ import {
 } from './utils';
 import { VolumesTable } from './volumes-table';
 import { StatefulSetModel } from '../models';
+import { LogConfigAction } from './log-config-actions';
 
 const { AddStorage, common, ModifyCount } = Kebab.factory;
 export const menuActions: KebabAction[] = [
+  LogConfigAction,
   AddHealthChecks,
   ModifyCount,
   AddStorage,

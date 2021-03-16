@@ -100,6 +100,9 @@ export const mockDeployImageFormData: DeployImageFormData = {
       privateKey: '',
     },
   },
+  logConfig: {
+    enabled: false,
+  },
   build: {
     env: [],
     triggers: {

@@ -23,6 +23,8 @@ import { getProbesData } from '../health-checks/create-health-checks-probe-utils
 import { RegistryType, getRuntime } from '../../utils/imagestream-utils';
 import { AppResources } from '../edit-application/edit-application-types';
 import { DeployImageFormData, Resources } from './import-types';
+import { getLogConfigAnnotations } from './log-config-utils'
+//import { V2VVMWARE_DEPLOYMENT_NAME } from 'packages/kubevirt-plugin/src/constants/v2v';
 
 export const createSystemImagePullerRoleBinding = (
   formData: DeployImageFormData,
@@ -157,6 +159,7 @@ export const createOrUpdateDeployment = (
       triggers: { image: imageChange },
     },
     labels: userLabels,
+    logConfig,
     limits: { cpu, memory },
     imageStream: { image: imgName, namespace: imgNamespace },
     healthChecks,
@@ -200,7 +203,10 @@ export const createOrUpdateDeployment = (
       template: {
         metadata: {
           labels: { ...userLabels, ...podLabels },
-          annotations,
+          annotations: {
+            ...annotations,
+            ...getLogConfigAnnotations(logConfig),
+          },
         },
         spec: {
           volumes,
@@ -234,6 +240,11 @@ export const createOrUpdateDeployment = (
   };
 
   const deployment = mergeData(originalDeployment, newDeployment);
+  /* eslint-disable: no-console */
+  console.info(`DBG.createOrUpdateDeployment@deployImage-submit-utils() => ${JSON.stringify({
+    verb,
+    deployment,
+  })}`);
 
   return verb === 'update'
     ? k8sUpdate(DeploymentModel, deployment)
@@ -253,6 +264,7 @@ export const createOrUpdateDeploymentConfig = (
     deployment: { env, replicas, triggers },
     labels: userLabels,
     limits: { cpu, memory },
+    logConfig,
     imageStream: { image: imgName, namespace: imgNamespace },
     healthChecks,
   } = formData;
@@ -274,7 +286,10 @@ export const createOrUpdateDeploymentConfig = (
       template: {
         metadata: {
           labels: { ...userLabels, ...podLabels },
-          annotations,
+          annotations: {
+            ...annotations,
+            ...getLogConfigAnnotations(logConfig),
+          },
         },
         spec: {
           volumes,

@@ -118,11 +118,16 @@ export const ServiceMonitorsList = (props) => (
   />
 );
 
-export const ServiceMonitorsPage = (props) => (
-  <ListPage
+export const ServiceMonitorsPage = (props) => {
+  const createProps = {
+    to: `/k8s/ns/${props.namespace}/servicemonitors/~new/form`
+  };
+
+  return <ListPage
     {...props}
     canCreate={true}
+    createProps={createProps}
     kind={referenceForModel(ServiceMonitorModel)}
     ListComponent={ServiceMonitorsList}
   />
-);
+};

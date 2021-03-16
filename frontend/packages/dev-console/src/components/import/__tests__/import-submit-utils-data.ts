@@ -121,6 +121,9 @@ export const defaultData: GitImportFormData = {
       privateKey: '',
     },
   },
+  logConfig: {
+    enabled: false,
+  },
   resources: Resources.OpenShift,
   build: {
     env: [],

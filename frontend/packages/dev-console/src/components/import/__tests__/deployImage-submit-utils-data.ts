@@ -63,6 +63,9 @@ export const defaultData: DeployImageFormData = {
       privateKey: '',
     },
   },
+  logConfig: {
+    enabled: false,
+  },
   build: {
     env: [],
     triggers: {

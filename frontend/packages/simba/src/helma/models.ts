@@ -98,14 +98,14 @@ export type HelmaKind = {
 
 export const NoCRD_HelmaModel: K8sKind = {
   id: 'cdn',
+  apiGroup: 'devops.snapp.ir',
+  apiVersion: 'v1',
   namespaced: true,
+  kind: 'CDN',
+  abbr: 'cdn',
   label: 'CDN',
   labelPlural: 'CDNs and WAFs',
-  apiVersion: 'v1',
-  apiGroup: 'devops.snapp.ir',
   plural: 'cdns',
-  abbr: 'cdn',
-  kind: 'CDN',
 };
 export const HelmaModel: K8sKind = Object.assign({}, NoCRD_HelmaModel, {
   crd: true,

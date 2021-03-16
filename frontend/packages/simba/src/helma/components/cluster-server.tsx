@@ -92,7 +92,7 @@ export class ClusterServerEditorComponent extends PromiseComponent<clusterServer
       });
   }
 
-  _validateInput() {
+  async _validateInput() {
     const { byAddress, weight, address, zone, serviceName, servicePort } = this.state;
     if (weight === null || weight < 0) {
       return new Error('Please specify a valid weight for this server');
@@ -309,7 +309,7 @@ export class ClusterServerEditorComponent extends PromiseComponent<clusterServer
                   <Alert
                     isInline
                     className="co-alert co-create-route__alert"
-                    variant="info"
+                    variant="warning"
                     title="No services">
                     There are no services in your project to expose behind a CDN.
                   </Alert>

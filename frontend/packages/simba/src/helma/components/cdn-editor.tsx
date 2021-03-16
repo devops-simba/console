@@ -87,6 +87,7 @@ function maxSequenceNumber(rules: HelmaRule[]): number {
 function fixRule(rules: HelmaRule[], rule: HelmaRule): HelmaRule {
   const result: HelmaRule = {
     cluster: rule.cluster,
+    location: rule.location,
     seq: rule.seq === null ? maxSequenceNumber(rules) : rule.seq,
   };
   if (!_.isEmpty(rule.customHeaders)) {
@@ -94,9 +95,6 @@ function fixRule(rules: HelmaRule[], rule: HelmaRule): HelmaRule {
   }
   if (!_.isEmpty(rule.customVariableInCookie)) {
     result.customVariableInCookie = rule.customVariableInCookie;
-  }
-  if (!_.isEmpty(rule.location)) {
-    result.location = rule.location;
   }
   if (rule.browserCacheMaxAge) {
     result.browserCacheMaxAge = rule.browserCacheMaxAge;

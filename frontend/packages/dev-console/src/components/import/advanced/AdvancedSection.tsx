@@ -16,6 +16,10 @@ import ResourceLimitSection from './ResourceLimitSection';
 import { AppResources } from '../../edit-application/edit-application-types';
 import HealthChecks from '../../health-checks/HealthChecks';
 
+import {
+  LogConfigCheckbox,
+} from '../logging/LogConfig'
+
 export interface AdvancedSectionProps {
   values: FormikValues;
   appResources?: AppResources;
@@ -29,6 +33,7 @@ const AdvancedSection: React.FC<AdvancedSectionProps> = ({ values, appResources 
   return (
     <FormSection title="Advanced Options" fullWidth>
       <RouteCheckbox isDisabled={values.route.disable} />
+      <LogConfigCheckbox />
       <ProgressiveList
         text="Click on the names to access advanced options for"
         visibleItems={visibleItems}

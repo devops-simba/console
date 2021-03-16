@@ -111,6 +111,12 @@ const DeployImage: React.FC<Props> = ({
       },
       strategy: 'Source',
     },
+    logConfig: {
+      enabled: false,
+      users: [],
+      logName: '',
+      ilm: 0,
+    },
     deployment: {
       env: [],
       triggers: {

@@ -1,5 +1,6 @@
 import * as _ from 'lodash'
 import * as React from 'react'
+import * as cx from 'classnames';
 import { Button } from '@patternfly/react-core'
 
 import './_components.scss'
@@ -11,15 +12,30 @@ export type KeyValuePair = {
 
 export type PairElementProps = {
   index: number;
+  tagClass?: string | ((index: number) => string);
   removeAction?: (index: number) => void;
+  onItemClick?: (index: number) => void;
+  clickable?: (index: number) => boolean;
   pair: KeyValuePair;
 };
 export const PairElement: React.FC<PairElementProps> = (props) => {
-  const {pair, removeAction, index} = props;
+  const {pair, removeAction, onItemClick, clickable, tagClass, index} = props;
   /* eslint-disable jsx-a11y/click-events-have-key-events */
   /* eslint-disable jsx-a11y/no-static-element-interactions */
   /* eslint-disable jsx-a11y/anchor-is-valid */
-  return <span className='tag-item'>
+  const isClickable = (clickable || (() => true))(index);
+  let className = cx('tag-item', {
+    'clickable': isClickable
+  });
+  if (tagClass) {
+    if (typeof(tagClass) === 'string') {
+      className = cx(className, tagClass);
+    } else {
+      className = cx(className, tagClass(index));
+    }
+  }
+  const onClick = (onItemClick && isClickable) ? () => onItemClick(index) : undefined;
+  return <span className={className} onClick={onClick}>
     {_.isEmpty(pair.value) && (
       <span className="tag-item__content">{pair.key}</span>
     )}
@@ -40,9 +56,12 @@ export type KeyValueEditorProps = {
   noValue?: boolean;
   keyPlaceholder?: string;
   valuePlaceholder?: string;
+  tagClass?: (index: number) => string;
   removeAction?: (index: number) => void;
   validator?: (key: string, value: string) => boolean;
   addAction?: (key: string, value: string) => void;
+  onItemClick?: (index: number) => void;
+  clickable?: (index: number) => boolean;
 };
 type keyValueEditorState = {
   id: number;
@@ -61,13 +80,22 @@ export class KeyValueEditor extends React.Component<KeyValueEditorProps, keyValu
       noValue,
       keyPlaceholder,
       valuePlaceholder,
+      tagClass,
       removeAction,
       addAction,
-      validator
+      validator,
+      onItemClick,
+      clickable,
     } = this.props;
     const {key, value} = this.state;
     const pairs = p.map((pair, index) =>
-      <PairElement index={index} pair={pair} removeAction={removeAction} />)
+      <PairElement
+        index={index}
+        pair={pair}
+        tagClass={tagClass}
+        removeAction={removeAction}
+        onItemClick={onItemClick}
+        clickable={clickable} />)
 
     const keyId = `kve-key-${this.state.id}`;
     const valueId = `kve-value-${this.state.id}`;

@@ -24,6 +24,7 @@ export const ServiceMonitorModel: K8sKind = {
   crd: true,
   plural: 'servicemonitors',
   propagationPolicy: 'Foreground',
+  legacyPluralURL: true,
 };
 
 export const AlertmanagerModel: K8sKind = {

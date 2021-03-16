@@ -43,6 +43,40 @@ export const applicationNameValidationSchema = yup.object().shape({
     }),
 });
 
+export const logConfigValidationSchema = yup.object().default({}).shape({
+  enabled: yup
+    .boolean()
+    .default(false),
+  users: yup
+    .array()
+    .default([])
+    .of(yup.string()
+      .required('Required')
+      .matches(/^[^\.]+\.[^.]+$/, 'Username must be in format "name.name"'))
+    .when('enabled', (enabled, schema) => (
+      enabled
+        ? schema.required('Required')
+          .min(1, 'Please add at least one user')
+          .max(6, 'Too many users')
+        : schema)),
+  ilm: yup
+    .number()
+    .integer()
+    .default(0)
+    .when('enabled', (enabled, schema) => (
+      enabled
+        ? schema.min(0, 'ILM must be a positive number')
+        : schema
+    )),
+  logName: yup
+    .string()
+    .when('enabled', (enabled, schema) => (
+      enabled
+        ? schema.required('LogName is required')
+        : schema
+    )),
+});
+
 export const deploymentValidationSchema = yup.object().shape({
   replicas: yup
     .number()
