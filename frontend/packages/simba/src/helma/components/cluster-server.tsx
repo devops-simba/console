@@ -92,7 +92,7 @@ export class ClusterServerEditorComponent extends PromiseComponent<clusterServer
       });
   }
 
-  async _validateInput() {
+  _validateInput() {
     const { byAddress, weight, address, zone, serviceName, servicePort } = this.state;
     if (weight === null || weight < 0) {
       return new Error('Please specify a valid weight for this server');
@@ -183,6 +183,18 @@ export class ClusterServerEditorComponent extends PromiseComponent<clusterServer
         {}
       );
 
+    const err = this._validateInput();
+    // eslint-disable-next-line
+    console.info(`DBG.ClusterServerEditorComponent.render(${JSON.stringify({
+      byAddress,
+      zone,
+      serviceName,
+      servicePort,
+      port,
+      weight,
+      err: err?.toString(),
+    })})`);
+
     return (
       <form
         name="form"
@@ -218,7 +230,7 @@ export class ClusterServerEditorComponent extends PromiseComponent<clusterServer
                     name="address"
                     type="text"
                     className="pf-c-form-control"
-                    value={address}
+                    value={address || ''}
                     onChange={(e)=> this.setState({address: e.target.value})}
                     aria-describedBy="address-help"
                     autoFocus
@@ -238,7 +250,7 @@ export class ClusterServerEditorComponent extends PromiseComponent<clusterServer
                     pattern="[0-9]*"
                     className="pf-c-form-control"
                     onChange={(e) => this.setState({port: e.target.value ? +e.target.value : null})}
-                    value={port}
+                    value={port || ''}
                   />
                 </div>
               </div>
