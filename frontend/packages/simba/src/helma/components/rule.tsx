@@ -79,7 +79,7 @@ export type RuleEditorProps = {
 type ruleEditorState = {
   cluster: string;
   customHeaders: KeyValuePair[];
-  customVariableInCookie: KeyValuePair[];
+  customVariableInCookie?: string;
   hostname?: string;
   location: string;
   seq: number;
@@ -93,7 +93,6 @@ function emptyState(seq: number): Omit<ruleEditorState, keyof PromiseComponentSt
     cluster: '',
     location: '/',
     customHeaders: [],
-    customVariableInCookie: [],
   };
 }
 function createState(rule: HelmaRule): Omit<ruleEditorState, keyof PromiseComponentState> {
@@ -101,22 +100,7 @@ function createState(rule: HelmaRule): Omit<ruleEditorState, keyof PromiseCompon
     seq: rule.seq,
     cluster: rule.cluster,
     customHeaders: (rule.customHeaders || []).map(({name, value}) => ({key: name, value})),
-    customVariableInCookie: (rule.customVariableInCookie || '')
-      .split('&')
-      .filter((v) => v !== '')
-      .map((v): KeyValuePair => {
-        const n = v.indexOf('=');
-        if (n === -1) {
-          return {
-            key: v,
-          };
-        } else {
-          return {
-            key: v.substring(0, n),
-            value: decodeURIComponent(v.substring(n+1)),
-          };
-        }
-      }),
+    customVariableInCookie: rule.customVariableInCookie,
     location: rule.location,
     browserCacheMaxAge: rule.browserCacheMaxAge,
     serverCacheMaxAge: rule.serverCacheMaxAge,
@@ -160,11 +144,7 @@ export class RuleEditor extends PromiseComponent<RuleEditorProps, ruleEditorStat
     return {
       cluster,
       customHeaders: customHeaders.map(({key, value}) => ({name: key, value})),
-      customVariableInCookie: _.isEmpty(customVariableInCookie)
-        ? null
-        : customVariableInCookie.map(({key, value}) =>
-            value ? `${key}=${encodeURIComponent(value)}` : key
-          ).join('&'),
+      customVariableInCookie,
       location,
       seq,
       browserCacheMaxAge,
@@ -338,27 +318,19 @@ export class RuleEditor extends PromiseComponent<RuleEditorProps, ruleEditorStat
             </div>
           </div>
           <div className="form-group">
-            <label htmlFor="kv-customVariableInCookie" className="conrol-label">Custom Variable In Cookie</label>
+            <label htmlFor="input-customVariableInCookie" className="conrol-label">Custom Variable In Cookie</label>
             <div className="modal-body__field">
-              <KeyValueEditor
-                pairs={customVariableInCookie}
-                removeAction={(index: number) => this.setState(({customVariableInCookie}) => {
-                  const ch = [...customVariableInCookie];
-                  ch.splice(index, 1);
-                  return {customVariableInCookie: ch};
-                })}
-                validator={(key, _) => {
-                  return /^[^ \t\(\)<>@,;:\\\"\/\[\]?={}\.]+$/.test(key || '');
-                }}
-                addAction={(key: string, value: string) => this.setState(({customVariableInCookie}) => {
-                  const cookies = [...customVariableInCookie];
-                  const n = cookies.findIndex((c) => c.key == key);
-                  if (n === -1) {
-                    cookies.push({key, value});
-                  } else {
-                    cookies.splice(n, 1, {key, value});
-                  }
-                  return {customVariableInCookie: cookies}
+              <input
+                id="input-customVariableInCookie"
+                data-test="input-customVariableInCookie"
+                name="customVariableInCookie"
+                type="text"
+                className="pf-c-form-control"
+                value={customVariableInCookie || ''}
+                aria-describedby="customVariableInCookie-help"
+                onChange={(e) => this.setState({
+                  customVariableInCookie: e.target.value,
+                  errorMessage: '', // reset possible error
                 })}
               />
             </div>
