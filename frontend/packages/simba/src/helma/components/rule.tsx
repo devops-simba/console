@@ -142,7 +142,7 @@ export class RuleEditor extends PromiseComponent<RuleEditorProps, ruleEditorStat
       serverCacheMaxAge,
       serverCacheMaxAgeForNon200,
     } = this.state;
-    return {
+    const result = {
       cluster,
       hostname,
       customHeaders: customHeaders.map(({key, value}) => ({name: key, value})),
@@ -152,7 +152,10 @@ export class RuleEditor extends PromiseComponent<RuleEditorProps, ruleEditorStat
       browserCacheMaxAge,
       serverCacheMaxAge,
       serverCacheMaxAgeForNon200,
-    }
+    };
+    /* eslint-disable: no-console */
+    console.info(`DBG.RuleEditor._createRule() -> ${JSON.stringify(result)}`)
+    return result
   }
   _submit(e: React.FormEvent<EventTarget>) {
     e.preventDefault();

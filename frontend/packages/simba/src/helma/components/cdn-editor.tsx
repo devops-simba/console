@@ -90,6 +90,9 @@ function fixRule(rules: HelmaRule[], rule: HelmaRule): HelmaRule {
     location: rule.location,
     seq: rule.seq === null ? maxSequenceNumber(rules) : rule.seq,
   };
+  if (rule.hostname) {
+    result.hostname = rule.hostname;
+  }
   if (!_.isEmpty(rule.customHeaders)) {
     result.customHeaders = rule.customHeaders;
   }
