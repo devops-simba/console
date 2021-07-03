@@ -133,6 +133,7 @@ export class RuleEditor extends PromiseComponent<RuleEditorProps, ruleEditorStat
   _createRule() : HelmaRule {
     const {
       cluster,
+      hostname,
       customHeaders,
       customVariableInCookie,
       location,
@@ -143,6 +144,7 @@ export class RuleEditor extends PromiseComponent<RuleEditorProps, ruleEditorStat
     } = this.state;
     return {
       cluster,
+      hostname,
       customHeaders: customHeaders.map(({key, value}) => ({name: key, value})),
       customVariableInCookie,
       location,
@@ -174,7 +176,7 @@ export class RuleEditor extends PromiseComponent<RuleEditorProps, ruleEditorStat
       cluster,
       customHeaders,
       customVariableInCookie,
-      //hostname,
+      hostname,
       location,
       seq,
       browserCacheMaxAge,
@@ -336,6 +338,28 @@ export class RuleEditor extends PromiseComponent<RuleEditorProps, ruleEditorStat
             </div>
             <div className="help-block" id="customVariableInCookie-help">
               Cookie variables that will be set by CDN provider before sending request to your application
+            </div>
+          </div>
+          <div className="form-group">
+            <label className="control-label">Custom Host Header</label>
+            <div className="modal-body__field">
+              <input
+                id="input-customHostHeader"
+                data-test="input-customHostHeader"
+                name="customHostHeader"
+                type="text"
+                className="pf-c-form-control"
+                value={hostname || ''}
+                aria-describedby="customHostHeader-help"
+                onChange={(e) => this.setState({
+                  hostname: e.target.value || null,
+                  errorMessage: '', // reset possible error
+                })}
+              />
+            </div>
+            <div className="help-block" id="customHostHeader-help">
+              Host header that will be passed to the CDN backend,
+              by default this is same as what enetered by the user
             </div>
           </div>
           <div className="form-group">
